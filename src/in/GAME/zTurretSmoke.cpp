@@ -121,7 +121,7 @@ S32 zTurretSmokeSystem::Update(U8* mem, S32 count, ptank_pool& pool_, F32 dt, vo
         if (p->life < 0.0f) {
             end--;
             // BUG: Should be *p = *end
-            *p = end[-1];
+            *p = *(end - 1);
             continue;
         }
 

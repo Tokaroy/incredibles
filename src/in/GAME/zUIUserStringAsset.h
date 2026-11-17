@@ -1,7 +1,7 @@
 #ifndef ZUIUSERSTRINGASSET_H
 #define ZUIUSERSTRINGASSET_H
 
-#include "zUIText.h"
+#include "zUITextAsset.h"
 
 struct zUIUserStringAsset : zUITextAsset
 {

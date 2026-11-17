@@ -439,12 +439,12 @@ bool behavior::in_state(const char* state, F32 look_ahead, xModelInstance* model
         return true;
     }
 
-    switch (astate->Flags & 0x70) {
-    case 0x00:
-    case 0x20:
+    switch (astate->Flags & AnimState_ModeMask) {
+    case AnimState_Once:
+    case AnimState_EndTransition:
         return (look_ahead * model->Anim->Single->CurrentSpeed + model->Anim->Single->Time <=
                 astate->Data->Duration);
-    case 0x10:
+    case AnimState_Loop:
         return true;
     }
 

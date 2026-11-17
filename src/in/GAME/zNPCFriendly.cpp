@@ -41,7 +41,7 @@ namespace zNPC
     {
         xAnimTableNewState(table, "BA_L_Cycle01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
-        xAnimTableNewState(table, "BA_T_Hit01", 0x20, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "BA_T_Hit01", AnimState_EndTransition, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
     }
 

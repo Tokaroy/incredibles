@@ -27,7 +27,7 @@ namespace zNPC
 
     void initial_anim::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "IA_T_First01", 0x20, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "IA_T_First01", AnimState_EndTransition, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
     }
 
@@ -51,7 +51,7 @@ namespace zNPC
 
     void mine_charge::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "MC_T_AttackStart01", 0x20, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL,
+        xAnimTableNewState(table, "MC_T_AttackStart01", AnimState_EndTransition, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL,
                            NULL, NULL, NULL);
         xAnimTableNewState(table, "MC_L_AttackLoop01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL,
                            NULL, NULL, NULL);

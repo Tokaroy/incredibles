@@ -6,43 +6,12 @@
 
 struct xVec4
 {
-    F32 x;
-    F32 y;
-    F32 z;
-    F32 w;
+    F32 x, y, z, w;
 };
 
 struct xFRect
 {
     F32 x, y, w, h;
-};
-
-struct xMat3x3
-{
-    xVec3 right;
-    S32 flags;
-    xVec3 up;
-    U32 pad1;
-    xVec3 at;
-    U32 pad2;
-} ALIGN(16);
-
-struct xMat4x3 : xMat3x3
-{
-    xVec3 pos;
-    U32 pad3;
-} ALIGN(16);
-
-struct xQuat
-{
-    xVec3 v;
-    F32 s;
-};
-
-struct xRot
-{
-    xVec3 axis;
-    F32 angle;
 };
 
 struct xLine3
@@ -83,22 +52,6 @@ struct xCapsule
     F32 r;
 };
 
-struct xPlane
-{
-    xVec3 norm;
-    F32 d;
-
-    void Init(const xVec3& pt)
-    {
-        d = norm.dot(pt);
-    }
-
-    void Init(const xVec3& normal, const xVec3& pt);
-
-    F32 Dist(const xVec3& pt) const;
-    void Project(xVec3& proj, const xVec3& pt, F32 dist_above) const;
-};
-
 // xRay3::flags
 #define XRAY3_USE_MIN (1<<10)
 #define XRAY3_USE_MAX (1<<11)
@@ -130,6 +83,51 @@ struct xIsect
     xVec3 point;
     xVec3 norm;
     F32 dist;
+};
+
+struct xMat3x3
+{
+    xVec3 right;
+    S32 flags;
+    xVec3 up;
+    U32 pad1;
+    xVec3 at;
+    U32 pad2;
+} ALIGN(16);
+
+struct xMat4x3 : xMat3x3
+{
+    xVec3 pos;
+    U32 pad3;
+} ALIGN(16);
+
+struct xQuat
+{
+    xVec3 v;
+    F32 s;
+};
+
+struct xRot
+{
+    xVec3 axis;
+    F32 angle;
+};
+
+class xPlane
+{
+public:
+    xVec3 norm;
+    F32 d;
+
+    void Init(const xVec3& pt)
+    {
+        d = norm.dot(pt);
+    }
+
+    void Init(const xVec3& normal, const xVec3& pt);
+
+    F32 Dist(const xVec3& pt) const;
+    void Project(xVec3& proj, const xVec3& pt, F32 dist_above) const;
 };
 
 extern const xVec3 g_O3;

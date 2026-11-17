@@ -27,7 +27,7 @@ namespace zNPC
 
         xSndGroupHandle GroupToPlay = xSndMgrGetSoundGroup(soundID);
 
-        return xSndMgrPlay(GroupToPlay, 0x800, NULL, NULL, this, NULL, NULL);
+        return xSndMgrPlay(GroupToPlay, xSnd_FOLLOW, NULL, NULL, this, NULL, NULL);
     }
 
     void base::initialize_bounds(F32 modelScale)

@@ -23,8 +23,7 @@ namespace zHud
 
     void FamilyMeter::setup()
     {
-        U32 HealthImageID = xStrHash("FAMILYHEALTH");
-        U32 HeadImageID = xStrHash("FAMILYHEAD");
+        U32 HealthImageID = xStrHash("FAMILYHEALTH"), HeadImageID = xStrHash("FAMILYHEAD");
         RwTexCoords upperleft, lowerright;
 
         m_pHealthImage = (xhud::image_widget*)&((xhud::widget_chunk*)zSceneFindObject(HealthImageID))->w;

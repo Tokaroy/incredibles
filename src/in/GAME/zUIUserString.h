@@ -11,16 +11,12 @@ public:
     {
     }
 
-    zUIUserStringAsset* GetAsset() const
-    {
-        return (zUIUserStringAsset*)zUI::GetAsset();
-    }
+    zUIUserStringAsset* GetAsset() const { return (zUIUserStringAsset*)zUI::GetAsset(); }
 
     virtual U32 GetSortKey() const;
     virtual void DoInit();
     virtual void DoReset();
-    virtual void DoHandleEvent(xBase* from, U32 toEvent, const F32* toParam,
-                               xBase* toParamWidget, U32 toParamWidgetID);
+    virtual void DoHandleEvent(xBase* from, U32 toEvent, const F32* toParam, xBase* toParamWidget, U32 toParamWidgetID);
 
 private:
     char* textBuffer;

@@ -108,7 +108,7 @@ bool zUICustomSysMessageManager::HandleEvent(xBase* from, U32 toEvent, const F32
     return true;
 }
 
-void zUICustomSysMessageManager::ShowSystemMessage(xBaseEventCB cb, U32, U32 _toCBEvent,
+void zUICustomSysMessageManager::ShowSystemMessage(xBaseEventCallback cb, U32, U32 _toCBEvent,
                                                    const F32* _toCBParams, xBase* _toCBto,
                                                    xBase* _toCBParamWidget,
                                                    U32 _toCBParamWidgetID,
