@@ -34,7 +34,6 @@ struct SphereCollisionResults
 // clang-format off
 class behavior
 {
-private:
     xEnt* owner;
 
 public:
@@ -107,7 +106,6 @@ struct behavior_node
 
 class behavior_manager
 {
-private:
     behavior_node* behavior_list;
     behavior_node* removed_list;
     behavior* current_behavior;

@@ -6,7 +6,6 @@
 
 class zUIBox : public zUI
 {
-private:
     xTextureHandle textures[9];
     F32 curRotation;
 };

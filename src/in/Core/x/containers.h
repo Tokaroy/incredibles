@@ -21,7 +21,6 @@ public:
 
         T& operator*() const { return _owner->_buffer[_it]; }
         
-    public:
         size_t _it;
         static_queue* _owner;
     };
@@ -200,7 +199,6 @@ private:
 
 class tier_queue_allocator
 {
-private:
     struct block_data
     {
         U8 prev;
@@ -300,7 +298,6 @@ private:
         return xMEMALLOC(_block_size * _unit_size, 0);
     }
 
-private:
     block_data* blocks;
     size_t _unit_size;
     size_t _block_size;
@@ -425,7 +422,6 @@ private:
         return it;
     }
 
-private:
     size_t first;
     size_t _size;
     size_t wrap_mask;

@@ -8,7 +8,6 @@ namespace zHud
 {
     class DiskIndicator : public hud_element
     {
-    private:
         xhud::image_widget* m_pImageWidget;
         F32 m_fCircleSpeed;
         F32 m_fCircleValue;

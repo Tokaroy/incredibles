@@ -8,7 +8,6 @@ namespace zHud
 {
     class hud_element : public xBase
     {
-    private:
         hud_element* _next;
 
     public:
@@ -48,7 +47,6 @@ namespace zHud
 
     class hud_system
     {
-    private:
         hud_element* elements;
         S8 hide_count;
         bool last_paused;
