@@ -1,17 +1,7 @@
 #ifndef ZACTIONLINE_H
 #define ZACTIONLINE_H
 
-#include "xMath3.h"
-
-typedef struct _tagActionLine
-{
-    U32 flags;
-    xVec3 pos[4];
-    F32 time_left;
-} ActionLine;
-
-// ActionLine::flags
-#define ZACTIONLINE_ENABLED 0x1
+#include "types.h"
 
 void zActionLineInit();
 void zActionLineUpdate(F32 seconds);
