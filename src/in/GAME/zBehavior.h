@@ -31,7 +31,6 @@ struct SphereCollisionResults
     S32 sphere_index;
 };
 
-// clang-format off
 class behavior
 {
     xEnt* owner;
@@ -67,12 +66,11 @@ public:
                                     xVec3& response_dpos, bool collide_on) { return true; }
     virtual void register_collision(const SphereCollisionResults& scene_collide) {}
     virtual F32 delay() { return 0.0f; }
-	virtual void set_state(const char* new_state, F32 blend, xModelInstance* model);
+    virtual void set_state(const char* new_state, F32 blend, xModelInstance* model);
     virtual void set_state(const char* new_state, F32 blend, F32 dest_time, xModelInstance* model);
 
     U32 type;
 };
-// clang-format on
 
 template <class T>
 class behavior_implementation : public behavior
