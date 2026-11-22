@@ -189,15 +189,15 @@ namespace {
     {
         S32 xor_flags = render_flags ^ context.flags;
 
-        if (xor_flags & 0x1) {
+        if (xor_flags & ptank_pool::FLAG_NOZTEST) {
             S32 noztest = context.flags & ptank_pool::FLAG_NOZTEST;
-            render_flags = (render_flags & ~0x1) | noztest;
+            render_flags = (render_flags & ~ptank_pool::FLAG_NOZTEST) | noztest;
             RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)!noztest);
         }
 
-        if (xor_flags & 0x2) {
+        if (xor_flags & ptank_pool::FLAG_ZWRITE) {
             S32 zwrite = context.flags & ptank_pool::FLAG_ZWRITE;
-            render_flags = (render_flags & ~0x2) | zwrite;
+            render_flags = (render_flags & ~ptank_pool::FLAG_ZWRITE) | zwrite;
             RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)zwrite);
         }
 
@@ -312,11 +312,11 @@ void xPTankPoolRender()
             render_ptank(*ptank, render_flags);
     }
 
-    if (render_flags & 0x1) {
+    if (render_flags & ptank_pool::FLAG_NOZTEST) {
         RwRenderStateSet(rwRENDERSTATEZTESTENABLE, (void*)TRUE);
     }
 
-    if (render_flags & 0x2) {
+    if (render_flags & ptank_pool::FLAG_ZWRITE) {
         RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
     }
 
