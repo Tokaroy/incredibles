@@ -1,29 +1,27 @@
 #include "xCommon.h"
 #include "zReference.h"
 
-#include "zScene.h"
 #include "xEvent.h"
+#include "zScene.h"
 
 void zReferenceInit(xBase& data, xDynAsset& asset, size_t)
 {
     zReferenceInit((zReference*)&data, (zReferenceAsset*)&asset);
 }
 
-void zReferenceInit(zReference* ref, zReferenceAsset* asset)
+void zReferenceInit(zReference* t, zReferenceAsset* a)
 {
-    xBaseInit(ref, asset);
+    xBaseInit(t, a);
 
-    ref->current = NULL;
-
-    if (asset->initial) {
-        ref->current = zSceneFindObject(asset->initial);
+    t->current = NULL;
+    if (a->initial) {
+        t->current = zSceneFindObject(a->initial);
     }
 
-    ref->eventFunc = zReferenceEventCB;
+    t->eventFunc = zReferenceEventCB;
 }
 
-void zReferenceEventCB(xBase* from, xBase* to, U32 toEvent, const F32* toParam,
-                       xBase* toParamWidget, U32 toParamWidgetID)
+void zReferenceEventCB(xBase* from, xBase* to, U32 toEvent, const F32* toParam, xBase* toParamWidget, U32 toParamWidgetID)
 {
     zReference* ref = (zReference*)to;
 

@@ -1,7 +1,7 @@
 #ifndef ZREFERENCE_H
 #define ZREFERENCE_H
 
-#include "xDynAsset.h"
+#include "xBase.h"
 #include "zReferenceAsset.h"
 
 struct zReference : xBase
@@ -10,8 +10,7 @@ struct zReference : xBase
 };
 
 void zReferenceInit(xBase& data, xDynAsset& asset, size_t);
-void zReferenceInit(zReference* ref, zReferenceAsset* asset);
-void zReferenceEventCB(xBase* from, xBase* to, U32 toEvent, const F32* toParam,
-                       xBase* toParamWidget, U32 toParamWidgetID);
+void zReferenceInit(zReference* t, zReferenceAsset* a);
+void zReferenceEventCB(xBase* from, xBase* to, U32 toEvent, const F32* toParam, xBase* toParamWidget, U32 toParamWidgetID);
 
 #endif
