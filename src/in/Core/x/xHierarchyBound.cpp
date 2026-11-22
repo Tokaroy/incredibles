@@ -1,6 +1,7 @@
 #include "xCommon.h"
 #include "xHierarchyBound.h"
 
+#include "xCollideSweptSphere.h"
 #include "xMemMgr.h"
 #include "iMath3.h"
 

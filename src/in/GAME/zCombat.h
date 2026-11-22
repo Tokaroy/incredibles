@@ -8,7 +8,10 @@
 #include "zShrapnel.h"
 #include "zAnimCache.h"
 #include "zCombatEffects.h"
-#include "xEnv.h"
+#include "xSkyDome.h"
+
+struct xEnv;
+struct xSweptSphere;
 
 struct zAttackTableState
 {
@@ -160,14 +163,16 @@ struct zCombat
         MS_SETVEL
     };
 
+    static const S32 MAX_HIT_OBJECTS = 24;
+
     xHierarchyBound bounds;
     U32 lastBoundUpdateTime;
     S16 currentHitPoints;
     S16 maximumHitPoints;
     U16 stateTableSize;
-    zAttackTableState* stateTable;
-    xAnimState* animationState;
-    zAttackTableState* runningAttack;
+    const zAttackTableState* stateTable;
+    const xAnimState* animationState;
+    const zAttackTableState* runningAttack;
     F32 runningAttackTimer;
     zAttackStateRunTimeData runningAttackData;
     xEnt* lastNPCDamaged;
@@ -177,7 +182,7 @@ struct zCombat
     U8 hitting;
     U8 hitEnv;
     U8 hitObjectCount;
-    xEnt* hitObjects[24];
+    xEnt* hitObjects[MAX_HIT_OBJECTS];
     S16 currentDamage;
     S16 lastHitDamage;
     zHitSource lastHitSource;
@@ -189,13 +194,23 @@ struct zCombat
     MoveState moveState;
     xVec3 moveStateVelocity;
 
-    void Init(const xHierarchyBoundInitData* initHierarchy, F32 masterRadius,
-              const zAttackTableState* stateTable, U16 stateTableSize, S32 hitPoints, const char*,
-              const char**, S32, F32 scale);
+    void Init(const xHierarchyBoundInitData* initHierarchy, F32 masterRadius, const zAttackTableState* stateTable,
+              U16 stateTableSize, S32 hitPoints, const char*, const char**, S32, F32 scale);
+    void PreUpdate(xEnt* ent, F32);
+    void PostUpdate(xEnt* ent, F32 dt);
     void RenderEffectModel(xEnt*);
+    void RenderAfterEffect(xEnt*);
 };
 
 void zCombatDamage(xEnt* ent, const zCombatDamageInfo& damageInfo);
-zCombat* zCombatGetFrom(xEnt* ent);
+
+inline zCombat* zCombatGetFrom(xEnt* ent)
+{
+    if (xSkyDome_EntityIsSkyDome(ent)) {
+        return NULL;
+    }
+
+    return (zCombat*)ent->user_data;
+}
 
 #endif

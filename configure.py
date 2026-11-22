@@ -651,7 +651,7 @@ config.libs = [
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zCombatCombo.cpp"),
             GameObject(NonMatching, "in/GAME/zCombatEffects.cpp"),
             GameObject(NonMatching, "in/GAME/zCombatLaser.cpp"),
-            GameObject(NonMatching, "in/GAME/zCombatSystem.cpp"),
+            GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zCombatSystem.cpp"),
             GameObject(NonMatching, "in/GAME/zCommonPlayer.cpp"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zConditional.cpp"),
             GameObject(Matching, "in/GAME/zConfiguration.cpp"),
