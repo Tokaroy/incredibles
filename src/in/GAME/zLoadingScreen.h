@@ -4,7 +4,7 @@
 #include "zAsync.h"
 #include "zUI.h"
 
-class zLoadingScreen : zAsync::Screen
+class zLoadingScreen : public zAsync::Screen
 {
 public:
     static void UnSetShowStats();
