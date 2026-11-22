@@ -1,0 +1,33 @@
+#ifndef ZZIPLINEASSET_H
+#define ZZIPLINEASSET_H
+
+#include "xBase.h"
+#include "xVec3.h"
+
+struct xEnt;
+
+namespace x
+{
+    struct NURBS;
+}
+
+struct zZipLineAsset : xBaseAsset
+{
+    U8 dismount_type;
+    xVec3 position;
+    F32 hang_length;
+    union
+    {
+        U32 startSplineID;
+        x::NURBS* spline;
+    };
+    union
+    {
+        U32 boundEntityID;
+        xEnt* boundEntity;
+    };
+    F32 speed;
+    U32 flags;
+};
+
+#endif

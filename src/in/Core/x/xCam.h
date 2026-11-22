@@ -146,6 +146,7 @@ public:
                        const xCamConfigFollow::zone_data& i1, const xCamConfigFollow::zone_data& i2, F32 s);
     static void spring_interp(F32& s, F32& v, F32 s0, F32 s1, F32 dt, F32 speed, F32 e);
     static void spring_interp(xVec3& s, F32& v, const xVec3& s0, const xVec3& s1, F32 dt, F32 speed, F32 e);
+    static void spring_interp(xVec3& s, xVec3& v, const xVec3& s0, const xVec3& s1, F32 dt, F32 speed, F32 e);
     static void spring_interp(xQuat& s, F32& v, const xQuat& s0, const xQuat& s1, F32 dt, F32 speed, F32 e);
     template <class T, class U>
     static void spring_interp(T& s, U& v, const T& s0, const T& s1, F32 dt, F32 speed);
@@ -354,6 +355,13 @@ inline void xCam::spring_interp(xVec3& s, F32& v, const xVec3& s0, const xVec3& 
     s.x = u * dx + s1.x;
     s.y = u * dy + s1.y;
     s.z = u * dz + s1.z;
+}
+
+inline void xCam::spring_interp(xVec3& s, xVec3& v, const xVec3& s0, const xVec3& s1, F32 dt, F32 speed, F32 e)
+{
+    spring_interp(s.x, v.x, s0.x, s1.x, dt, speed, e);
+    spring_interp(s.y, v.y, s0.y, s1.y, dt, speed, e);
+    spring_interp(s.z, v.z, s0.z, s1.z, dt, speed, e);
 }
 
 inline void xCam::spring_interp(xQuat& s, F32& v, const xQuat& s0, const xQuat& s1, F32 dt, F32 speed, F32 e)
