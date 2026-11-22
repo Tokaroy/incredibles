@@ -1,8 +1,8 @@
 #ifndef ZTIMEHANDLER_H
 #define ZTIMEHANDLER_H
 
+#include "xVec3.h"
 #include "zQueue.h"
-#include "xMath3.h"
 
 struct zTimeHandlerStruct
 {
@@ -12,6 +12,17 @@ struct zTimeHandlerStruct
     xVec3 pos;
     xVec3 normal;
     F32 num_particles;
+
+    zTimeHandlerStruct& operator=(const zTimeHandlerStruct& data)
+    {
+        cb = data.cb;
+        elapsed = data.elapsed;
+        period = data.period;
+        pos = data.pos;
+        normal = data.normal;
+        num_particles = data.num_particles;
+        return *this;
+    }
 };
 
 class zTimeHandlerMgr : public zQueue<zTimeHandlerStruct, 64>
