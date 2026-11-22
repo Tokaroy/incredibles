@@ -6,8 +6,9 @@
 
 struct xWaterShading;
 
-struct zWaterBody : xBase
+class zWaterBody : private xBase
 {
+public:
     struct asset_type : xDynAsset
     {
         U32 flags;
@@ -19,6 +20,8 @@ struct zWaterBody : xBase
     };
 
     S32 motion_type;
+
+private:
     const asset_type* asset;
     xEnt* body_ent;
     xEnt** refract_ents;
@@ -28,6 +31,7 @@ struct zWaterBody : xBase
     S32 body_id;
     bool visible;
 
+public:
     static void load(xBase& data, xDynAsset& asset, size_t);
     static void setup_all(); // UNUSED
     static void reset_all(); // UNUSED
