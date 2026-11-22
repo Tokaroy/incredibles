@@ -23,6 +23,23 @@ private:
     xCounter* counter;
 };
 
+class zUICustomPowerEffect : public zUICustom
+{
+public:
+    zUICustomPowerEffect(zUI* ui);
+
+    virtual void Reset();
+    virtual void PreUpdate(F32 dt);
+    virtual bool PreRender();
+    virtual void PostRender();
+    virtual void PreApplyMotionFrame(zUIMotionFrame* frame);
+
+private:
+    F32 scrollTime;
+    F32 scrollTotal;
+    F32 waitTime;
+};
+
 S32 zUIIncrediblesGetPauseType();
 
 #endif

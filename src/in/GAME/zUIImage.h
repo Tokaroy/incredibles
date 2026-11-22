@@ -2,11 +2,13 @@
 #define ZUIIMAGE_H
 
 #include "zUI.h"
+#include "zUIImageAsset.h"
 #include "xTextureManager.h"
 
 class zUIImage : public zUI
 {
 public:
+    zUIImageAsset* GetAsset() const { return (zUIImageAsset*)zUI::GetAsset(); }
     void SetTexture(U32 id, bool clearPrev);
 
 private:
