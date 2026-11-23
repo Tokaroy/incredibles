@@ -4,139 +4,119 @@
 #include "xEvent.h"
 #include "xTextAsset.h"
 #include "zCheat.h"
+#include "zUI.h"
 
-#include <string.h>
 #include <new>
+#include <string.h>
 
 void zUIUserString::DoInit()
 {
     zUIText::DoInit();
-
     if (linkCount) {
         link = (xLinkAsset*)(GetAsset() + 1);
     }
 
     textBuffer = (char*)zUIAllocStaticMemory(GetAsset()->hardMaxChars + 1);
-
     SetText(textBuffer);
 }
 
 void zUIUserString::DoReset()
 {
     zUIText::DoReset();
-
     SetText(textBuffer);
 
-    const char* text = GetText();
+    const char* initialText = GetText();
 
     maxLength = GetAsset()->softMaxChars;
     length = 0;
     textBuffer[0] = '\0';
 
-    if (text) {
-        strcpy(textBuffer, text);
-        length = strlen(text);
+    if (initialText) {
+        strcpy(textBuffer, initialText);
+        length = strlen(initialText);
     }
 }
 
-void zUIUserString::DoHandleEvent(xBase* from, U32 toEvent, const F32* toParam,
-                                  xBase* toParamWidget, U32 toParamWidgetID)
+void zUIUserString::DoHandleEvent(xBase* from, U32 toEvent, const F32* toParam, xBase* toParamWidget,
+                                  U32 toParamWidgetID)
 {
     switch (toEvent) {
-    case eEventSetText:
-    {
+    case eEventSetText: {
         U32 len;
         const char* asset = xTextFindString(toParamWidgetID, &len);
-
         if (!asset) {
             textBuffer[0] = '\0';
             length = 0;
-
             zEntEvent(this, this, eEventUIStringEmpty);
         } else {
-            strcpy(textBuffer, asset + 1);
-
+            const char* text = asset + 1;
+            strcpy(textBuffer, text);
             length = len;
-
             if (length >= maxLength) {
+                // BUG: should be eEventUIStringFull
                 zEntEvent(this, this, eEventUIStringEmpty);
             }
         }
-
         break;
     }
-    case eEventUIAddChar:
-    {
-        // Cast to S32 instead of S8.
-        // This generates an extsb instruction.
-        S8 ch = (S32)toParam[0];
 
+    case eEventUIAddChar: {
+        char ch = (S32)toParam[0];
         if (length < maxLength) {
             textBuffer[length++] = ch;
             textBuffer[length] = '\0';
-
             if (length == maxLength) {
                 zEntEvent(this, this, eEventUIStringFull);
             }
         }
-
         break;
     }
+
     case eEventUIDelChar:
-    {
         if (length > 0) {
             textBuffer[--length] = '\0';
-
             if (length == 0) {
                 zEntEvent(this, this, eEventUIStringEmpty);
             }
         }
-
         break;
-    }
+
     case eEventUISetMaxChars:
-    {
-        maxLength = (S32)toParam[1];
-
-        if (maxLength > GetAsset()->hardMaxChars) {
+        maxLength = toParam[1];
+        if (maxLength > GetAsset()->hardMaxChars)
             maxLength = GetAsset()->hardMaxChars;
-        }
-
         if (length > maxLength) {
             length = maxLength;
             textBuffer[length] = '\0';
         }
-
         break;
-    }
-    case eEventUIStringSendAsCheat:
-    {
-        if (stricmp(textBuffer, "YourNameInLights") == 0) {
+
+    case eEventUISendStringAsCheat:
+        if (stricmp(textBuffer, "YourNameInLights") == 0)
             zEntEvent(this, this, eEventUISignalCreditCode);
-        } else {
+        else
             switch (zCheatProcess(textBuffer)) {
-            case 1:
+            case zCheatStatus_Ok:
                 zEntEvent(this, this, eEventUICheatOK);
                 break;
-            case 0:
+
+            case zCheatStatus_Bad:
                 zEntEvent(this, this, eEventUICheatBad);
                 break;
-            case 2:
+
+            case zCheatStatus_CreditCode:
                 zEntEvent(this, this, eEventUISignalCreditCode);
                 break;
-            case 3:
+
+            case zCheatStatus_HILogo:
                 zEntEvent(this, this, eEventUISignalHILogo);
                 break;
             }
-        }
-
         break;
-    }
+
     default:
-    {
         zUI::DoHandleEvent(from, toEvent, toParam, toParamWidget, toParamWidgetID);
         break;
-    }
     }
 }
 
@@ -150,8 +130,8 @@ void zUIUserString_Init(xBase& data, xDynAsset& asset, size_t)
     zUIUserString_Init((zUIUserString*)&data, (zUIUserStringAsset*)&asset);
 }
 
-void zUIUserString_Init(zUIUserString* ui, zUIUserStringAsset* asset)
+void zUIUserString_Init(zUIUserString* userString, zUIUserStringAsset* asset)
 {
-    new (ui) zUIUserString;
-    zUI_Init(ui, asset);
+    new (userString) zUIUserString();
+    zUI_Init(userString, asset);
 }

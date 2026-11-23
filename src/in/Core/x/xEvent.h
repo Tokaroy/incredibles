@@ -192,7 +192,7 @@ enum en_xEventTags
     eEventUIDelChar,
     eEventUIStringEmpty,
     eEventUIStringFull,
-    eEventUIStringSendAsCheat,
+    eEventUISendStringAsCheat,
     eEventUISetMaxChars,
     eEventUICheatOK,
     eEventUICheatBad,

@@ -9,17 +9,8 @@ class xtextbox;
 class zUIText : public zUI
 {
 public:
-    zUIText();
-
-    void SetText(const char* t);
-
-    const char* GetText() const
-    {
-        return text;
-    }
-
     virtual U32 GetSortKey() const;
-    virtual bool IsUIText();
+    virtual bool IsUIText() { return true; }
     virtual void DoInit();
     virtual void DoReset();
     virtual void DoHandleEvent(xBase* from, U32 toEvent, const F32* toParam, xBase* toParamWidget, U32 toParamWidgetID);
@@ -27,6 +18,8 @@ public:
     virtual void DoApplyMotionFrame(const zUIMotionFrame* frame);
 
     void setup_textbox(xtextbox& tb, const zUITextAsset* asset) const;
+    void SetText(const char* text) { this->text = text; }
+    const char* GetText() const { return text; }
 
 private:
     xColor shadowColor;

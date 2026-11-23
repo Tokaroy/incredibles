@@ -1,12 +1,14 @@
 #ifndef ZCHEAT_H
 #define ZCHEAT_H
 
-#include "types.h"
+enum zCheatStatus
+{
+    zCheatStatus_Bad,
+    zCheatStatus_Ok,
+    zCheatStatus_CreditCode,
+    zCheatStatus_HILogo
+};
 
-#ifdef GAMECUBE
-S32 zCheatProcess(const char* name);
-#else
-bool zCheatProcess(const char* name);
-#endif
+zCheatStatus zCheatProcess(const char* name);
 
 #endif

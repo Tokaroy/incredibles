@@ -7,10 +7,6 @@
 class zUIUserString : public zUIText
 {
 public:
-    zUIUserString() : zUIText()
-    {
-    }
-
     zUIUserStringAsset* GetAsset() const { return (zUIUserStringAsset*)zUI::GetAsset(); }
 
     virtual U32 GetSortKey() const;
@@ -25,6 +21,6 @@ private:
 };
 
 void zUIUserString_Init(xBase& data, xDynAsset& asset, size_t);
-void zUIUserString_Init(zUIUserString* ui, zUIUserStringAsset* asset);
+void zUIUserString_Init(zUIUserString* userString, zUIUserStringAsset* asset);
 
 #endif
