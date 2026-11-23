@@ -673,7 +673,7 @@ config.libs = [
             GameObject(NonMatching, "in/GAME/zFlameEmitter.cpp"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78"), "in/GAME/zFMV.cpp"),
             GameObject(Matching, "in/GAME/zFX.cpp"),
-            GameObject(NonMatching, "in/GAME/zFXRibbonPool.cpp"),
+            GameObject(Matching, "in/GAME/zFXRibbonPool.cpp"),
             GameObject(NonMatching, "in/GAME/zGame.cpp"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zGameExtras.cpp"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zGameState.cpp"),
