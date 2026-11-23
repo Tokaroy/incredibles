@@ -1,8 +1,11 @@
 #include "xCommon.h"
 #include "zPortal.h"
 
-#include "zMain.h"
 #include "xEvent.h"
+#include "zGlobals.h"
+#include "zMain.h"
+#include "zPlayer.h"
+#include "zScene.h"
 
 void zPortalInit(void* portal, void* passet)
 {
@@ -16,14 +19,13 @@ void zPortalInit(zPortal* portal, xPortalAsset* passet)
     portal->passet = passet;
     portal->eventFunc = zPortalEventCB;
 
-    if (portal->linkCount) {
+    if (portal->linkCount)
         portal->link = (xLinkAsset*)(portal->passet + 1);
-    }
 }
 
-void zPortalReset(zPortal* portal)
+void zPortalReset(zPortal* ent)
 {
-    xBaseReset(portal, portal->passet);
+    xBaseReset(ent, ent->passet);
 }
 
 void zPortalSave(zPortal* ent, xSerial* s)
@@ -40,12 +42,9 @@ void zPortalEventCB(xBase*, xBase* to, U32 toEvent, const F32* toParam, xBase*, 
 {
     switch (toEvent) {
     case eEventReset:
-    {
         zPortalReset((zPortal*)to);
         break;
-    }
     case eEventTeleportPlayer:
-    {
         if (ZPLAYER->IsDead()) {
             break;
         }
@@ -56,6 +55,5 @@ void zPortalEventCB(xBase*, xBase* to, U32 toEvent, const F32* toParam, xBase*, 
         }
 
         break;
-    }
     }
 }
