@@ -1,119 +1,122 @@
 #include "xCommon.h"
 #include "zHud.h"
 
+#include "containers.h"
+#include "xCam.h"
+#include "xHud.h"
+#include "xPtankPool.h"
 #include "zGame.h"
-#include "zMain.h"
+#include "zGlobals.h"
 
-namespace
+namespace {
+
+void EventHandlerFunc(xBase* from, xBase* to, U32 toEvent, const F32* toParam, xBase* toParamWidget,
+                      U32 toParamWidgetID)
 {
-    void EventHandlerFunc(xBase* from, xBase* to, U32 toEvent, const F32* toParam,
-                          xBase* toParamWidget, U32 toParamWidgetID)
-    {
-        ((zHud::hud_element*)to)
-            ->handle_event(from, toEvent, toParam, toParamWidget, toParamWidgetID);
-    }
+    zHud::hud_element* element = (zHud::hud_element*)to;
+    element->handle_event(from, toEvent, toParam, toParamWidget, toParamWidgetID);
+}
+
 } // namespace
 
-namespace zHud
+namespace zHud {
+
+void hud_element::init()
 {
-    void hud_element::init()
-    {
-        eventFunc = EventHandlerFunc;
+    eventFunc = EventHandlerFunc;
+    xBaseEnable(this);
+}
 
-        xBaseEnable(this);
+void hud_system::startup()
+{
+}
+
+void hud_system::shutdown()
+{
+}
+
+void hud_system::init()
+{
+    last_paused = false;
+    hide_count = 0;
+    xhud::init();
+
+    for (hud_element* element = elements; element; element = element->next()) {
+        element->init();
     }
+}
 
-    void hud_system::startup()
-    {
+void hud_system::update(F32 dt)
+{
+    if (!last_paused && zGameIsPaused()) {
+        hide();
+        last_paused = true;
     }
-
-    void hud_system::shutdown()
-    {
-    }
-
-    void hud_system::init()
-    {
+    else if (last_paused && !zGameIsPaused()) {
+        show();
         last_paused = false;
+    }
+
+    for (hud_element* element = elements; element; element = element->next()) {
+        element->update(dt);
+    }
+
+    xhud::update(dt);
+}
+
+void hud_system::render()
+{
+    if (globals.cmgr) {
+        return;
+    }
+
+    xhud::render();
+}
+
+void hud_system::show()
+{
+    hide_count--;
+    if (hide_count < 0) {
         hide_count = 0;
-
-        xhud::init();
-
-        for (hud_element* element = elements; element != NULL; element = element->next()) {
-            element->init();
-        }
     }
 
-    void hud_system::update(F32 dt)
-    {
-        if (!last_paused && zGameIsPaused()) {
-            hide();
-            last_paused = true;
-        } else if (last_paused && !zGameIsPaused()) {
-            show();
-            last_paused = false;
-        }
-
-        for (hud_element* element = elements; element != NULL; element = element->next()) {
-            element->update(dt);
-        }
-
-        xhud::update(dt);
-    }
-
-    void hud_system::render()
-    {
-        if (!globals.cmgr) {
-            xhud::render();
+    if (hide_count == 0) {
+        for (hud_element* element = elements; element; element = element->next()) {
+            element->show();
         }
     }
+}
 
-    void hud_system::show()
-    {
-        hide_count--;
-
-        if (hide_count < 0) {
-            hide_count = 0;
-        }
-
-        if (hide_count == 0) {
-            for (hud_element* element = elements; element != NULL; element = element->next()) {
-                element->show();
-            }
+void hud_system::hide()
+{
+    hide_count++;
+    if (hide_count == 1) {
+        for (hud_element* element = elements; element; element = element->next()) {
+            element->hide();
         }
     }
+}
 
-    void hud_system::hide()
-    {
-        hide_count++;
+void hud_system::add(hud_element* element)
+{
+    element->setup();
+    element->_next = elements;
+    elements = element;
+}
 
-        if (hide_count == 1) {
-            for (hud_element* element = elements; element != NULL; element = element->next()) {
-                element->hide();
-            }
-        }
+void hud_system::destroy()
+{
+    for (hud_element* element = elements; element; element = element->next()) {
+        element->destroy();
     }
+    elements = NULL;
+    xhud::destroy();
+}
 
-    void hud_system::add(hud_element* element)
-    {
-        element->setup();
-        element->_next = elements;
-        elements = element;
-    }
+hud_system& hud_system::instance()
+{
+    static hud_system _instance;
+    return _instance;
+}
 
-    void hud_system::destroy()
-    {
-        for (hud_element* element = elements; element != NULL; element = element->next()) {
-            element->destroy();
-        }
-
-        elements = NULL;
-
-        xhud::destroy();
-    }
-
-    hud_system& hud_system::instance()
-    {
-        static hud_system _instance;
-        return _instance;
-    }
 } // namespace zHud

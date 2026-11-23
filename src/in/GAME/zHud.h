@@ -2,73 +2,52 @@
 #define ZHUD_H
 
 #include "xBase.h"
-#include "xHud.h"
 
-namespace zHud
+namespace zHud {
+
+class hud_element : public xBase
 {
-    class hud_element : public xBase
+    friend class hud_system;
+
+    hud_element* _next;
+
+public:
+    virtual void init();
+    virtual void setup() {}
+    virtual void update(F32) {}
+    virtual void destroy() {}
+    virtual void show() = 0;
+    virtual void hide() = 0;
+    virtual void handle_event(xBase*, U32, const F32*, xBase*, U32) {}
+    virtual void reset() = 0;
+
+    hud_element* next()
     {
-        hud_element* _next;
+        return _next;
+    }
+};
 
-    public:
-        hud_element();
+class hud_system
+{
+    hud_element* elements;
+    S8 hide_count;
+    bool last_paused;
 
-        hud_element* next()
-        {
-            return _next;
-        }
+    hud_system() {}
 
-        virtual void init();
+public:
+    static void startup();
+    static void shutdown();
+    void init();
+    void update(F32 dt);
+    void render();
+    void show();
+    void hide();
+    void add(hud_element* element);
+    void destroy();
+    static hud_system& instance();
+};
 
-        virtual void setup()
-        {
-        }
-
-        virtual void update(F32 dt)
-        {
-        }
-
-        virtual void destroy()
-        {
-        }
-
-        virtual void show() = 0;
-        virtual void hide() = 0;
-
-        virtual void handle_event(xBase* from, U32 toEvent, const F32* toParam,
-                                  xBase* toParamWidget, U32 toParamWidgetID)
-        {
-        }
-
-        virtual void reset() = 0;
-
-        friend class hud_system;
-    };
-
-    class hud_system
-    {
-        hud_element* elements;
-        S8 hide_count;
-        bool last_paused;
-
-    public:
-        hud_system()
-        {
-        }
-
-        static hud_system& instance();
-
-        void startup();
-        void shutdown();
-        void init();
-        void update(F32 dt);
-        void render();
-        void show();
-        void hide();
-        bool is_shown();
-        void add(hud_element* element);
-        void destroy();
-    };
 } // namespace zHud
 
 #endif
