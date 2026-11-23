@@ -1,7 +1,11 @@
 #ifndef ZANIMCACHE_H
 #define ZANIMCACHE_H
 
-#include "xAnim.h"
+#include "xMath3.h"
+
+struct xAnimFile;
+struct xAnimPlay;
+struct zAttackTableState;
 
 struct zAnimCacheEntry
 {
@@ -10,9 +14,7 @@ struct zAnimCacheEntry
     U16 bone;
 };
 
-struct zAttackTableState;
-
-void zAnimCacheCreateData(zAttackTableState* attackTableStates, U32 attackTableCount,
-                          xAnimPlay* animPlay);
+void zAnimCacheClear();
+void zAnimCacheCreateData(zAttackTableState* attackTableStates, U32 attackTableCount, xAnimPlay* animPlay);
 
 #endif

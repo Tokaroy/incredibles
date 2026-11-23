@@ -634,7 +634,7 @@ config.libs = [
             GameObject(MatchingFor("GICE78"), "in/Core/gc/iTRC.cpp"),
             GameObject(Matching, "in/Core/gc/iAnim.cpp"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zZipLine.cpp"),
-            GameObject(NonMatching, "in/GAME/zAnimCache.cpp"),
+            GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zAnimCache.cpp"),
             GameObject(NonMatching, "in/GAME/zAnimList.cpp"),
             GameObject(NonMatching, "in/GAME/zAssetTypes.cpp"),
             GameObject(NonMatching, "in/GAME/zBulletTime.cpp"),
