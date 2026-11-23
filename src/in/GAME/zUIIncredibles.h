@@ -51,6 +51,28 @@ private:
     const char* names[xSndMode_Count];
 };
 
+class zUICustomStatic : public zUICustom
+{
+public:
+    zUICustomStatic(zUI* ui);
+
+    virtual void Reset();
+    virtual void PreUpdate(F32 dt);
+    virtual void PreApplyMotionFrame(zUIMotionFrame* frame);
+
+private:
+    enum Stage
+    {
+        Stage_Off,
+        Stage_FadeIn,
+        Stage_On,
+        Stage_FadeOut
+    };
+
+    Stage stage;
+    F32 timer;
+};
+
 class zUICustomPowerEffect : public zUICustom
 {
 public:
