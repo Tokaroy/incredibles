@@ -1,12 +1,14 @@
 #ifndef ZJSPEXTRADATA_H
 #define ZJSPEXTRADATA_H
 
+#include "xBase.h"
 #include "xDynAsset.h"
 
 struct zJSPExtraData : xBase
 {
-    struct zJSPExtraDataAsset : xDynAsset
+    class zJSPExtraDataAsset : public xDynAsset
     {
+    public:
         U32 jspID;
         U32 groupID;
     };
@@ -19,14 +21,14 @@ struct zJSPExtraData : xBase
         xBase* pWidget;
     };
 
-    static jspGroupPair sJspGroupPairs[10];
+    static const S32 MAX_PAIRS = 10;
+    static jspGroupPair sJspGroupPairs[MAX_PAIRS];
     static S32 sNumPairs;
 
     static void ShowAssociatedGroup(U32 jspAssetId, bool show);
-    static void AddPair(U32 jspID, U32 groupID, zJSPExtraData* data);
+    static void AddPair(U32 jspID, U32 groupID, zJSPExtraData* widget);
     static void Load(xBase& data, xDynAsset& asset, size_t);
-
-    void LoadPrivate(const zJSPExtraDataAsset& asset);
+    void LoadPrivate(const zJSPExtraDataAsset& myAsset);
 };
 
 #endif

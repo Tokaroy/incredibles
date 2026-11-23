@@ -1,48 +1,41 @@
 #include "xCommon.h"
 #include "zJSPExtraData.h"
 
-#include "zScene.h"
 #include "xEvent.h"
+#include "zScene.h"
 
-zJSPExtraData::jspGroupPair zJSPExtraData::sJspGroupPairs[10];
-S32 zJSPExtraData::sNumPairs = 0;
+zJSPExtraData::jspGroupPair zJSPExtraData::sJspGroupPairs[MAX_PAIRS];
+S32 zJSPExtraData::sNumPairs;
 
 void zJSPExtraData::ShowAssociatedGroup(U32 jspAssetId, bool show)
 {
     for (S32 i = 0; i < sNumPairs; i++) {
-        if (sJspGroupPairs[i].jspID == jspAssetId) {
+        if (jspAssetId == sJspGroupPairs[i].jspID) {
             if (show) {
                 if (!sJspGroupPairs[i].pGroup && sJspGroupPairs[i].groupID) {
                     sJspGroupPairs[i].pGroup = zSceneFindObject(sJspGroupPairs[i].groupID);
                 }
-
-                if (sJspGroupPairs[i].pGroup) {
+                if (sJspGroupPairs[i].pGroup)
                     zEntEvent(sJspGroupPairs[i].pGroup, eEventVisibilityCullOff);
-                }
-
                 zEntEvent(sJspGroupPairs[i].pWidget, eEventOn);
             } else {
                 if (!sJspGroupPairs[i].pGroup && sJspGroupPairs[i].groupID) {
                     sJspGroupPairs[i].pGroup = zSceneFindObject(sJspGroupPairs[i].groupID);
                 }
-
-                if (sJspGroupPairs[i].pGroup) {
+                if (sJspGroupPairs[i].pGroup)
                     zEntEvent(sJspGroupPairs[i].pGroup, eEventVisibilityCullOn);
-                }
-
                 zEntEvent(sJspGroupPairs[i].pWidget, eEventOff);
             }
         }
     }
 }
 
-void zJSPExtraData::AddPair(U32 jspID, U32 groupID, zJSPExtraData* data)
+void zJSPExtraData::AddPair(U32 jspID, U32 groupID, zJSPExtraData* widget)
 {
     sJspGroupPairs[sNumPairs].jspID = jspID;
     sJspGroupPairs[sNumPairs].groupID = groupID;
     sJspGroupPairs[sNumPairs].pGroup = NULL;
-    sJspGroupPairs[sNumPairs].pWidget = data;
-
+    sJspGroupPairs[sNumPairs].pWidget = widget;
     sNumPairs++;
 }
 
@@ -51,15 +44,14 @@ void zJSPExtraData::Load(xBase& data, xDynAsset& asset, size_t)
     ((zJSPExtraData&)data).LoadPrivate((zJSPExtraDataAsset&)asset);
 }
 
-void zJSPExtraData::LoadPrivate(const zJSPExtraDataAsset& asset)
+void zJSPExtraData::LoadPrivate(const zJSPExtraDataAsset& myAsset)
 {
-    xBaseInit(this, &asset);
+    xBaseInit(this, &myAsset);
 
-    if (linkCount) {
-        link = (xLinkAsset*)(&asset + 1);
-    } else {
+    if (linkCount)
+        link = (xLinkAsset*)(&myAsset + 1);
+    else
         link = NULL;
-    }
 
-    AddPair(asset.jspID, asset.groupID, this);
+    AddPair(myAsset.jspID, myAsset.groupID, this);
 }
