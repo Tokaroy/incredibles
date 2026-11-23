@@ -7,6 +7,7 @@ void zSlideCam::create()
 
     coord_type = XCAM_COORD_CART;
     orient_type = XCAM_ORIENT_QUAT;
+
     cfg_common.priority = 128;
     cfg_common.blend_time = 1.0f;
 
@@ -29,26 +30,22 @@ void zSlideCam::start()
     cam_pos = curr_tgt_pos;
 }
 
-static xVec3 SpringDamp(const xVec3& cam_pos, const xVec3& curr_tgt_pos, const xVec3& prev_tgt_pos,
-                        F32 dt, F32 spring_const, F32 damp_const, F32 spring_len)
+static xVec3 SpringDamp(const xVec3& currPos, const xVec3& trgPos, const xVec3& prevTrgPos, F32 deltaTime, F32 springConst, F32 dampConst, F32 springLen)
 {
     xVec3 disp, velocity;
+    F32 forceMag;
 
-    disp = cam_pos - curr_tgt_pos;
-    velocity = (prev_tgt_pos - curr_tgt_pos) * dt;
-
-    F32 forceMag, len = xVec3Length(&disp), dot = xVec3Dot(&disp, &velocity);
+    disp = currPos - trgPos;
+    velocity = (prevTrgPos - trgPos) * deltaTime;
+    F32 len = xVec3Length(&disp);
+    F32 dot = xVec3Dot(&disp, &velocity);
+    forceMag = springConst * (springLen - len) + dampConst * (dot / len);
 
     xVec3Normalize(&disp, &disp);
-
-    forceMag = spring_const * (spring_len - len) + damp_const * (dot / len);
-
-    disp *= forceMag * dt;
+    disp *= forceMag * deltaTime;
 
     xVec3 r;
-
-    xVec3Add(&r, &cam_pos, &disp);
-
+    xVec3Add(&r, &currPos, &disp);
     return r;
 }
 
@@ -68,17 +65,16 @@ void zSlideCam::update(xScene&, F32 dt)
 {
     setCurrTgtPos(target->pos, target->up);
 
-    if (xVec3Length(curr_tgt_pos.x - prev_tgt_pos.x, curr_tgt_pos.y - prev_tgt_pos.y,
-                    curr_tgt_pos.z - prev_tgt_pos.z) > 0.001f) {
-        cam_pos = SpringDamp(cam_pos, curr_tgt_pos, prev_tgt_pos, dt, cfg.spring_const,
-                             cfg.damp_const, cfg.spring_len);
+    F32 len = xVec3Length(curr_tgt_pos.x - prev_tgt_pos.x, curr_tgt_pos.y - prev_tgt_pos.y, curr_tgt_pos.z - prev_tgt_pos.z);
+
+    if (len > 0.001f) {
+        cam_pos = SpringDamp(cam_pos, curr_tgt_pos, prev_tgt_pos, dt, cfg.spring_const, cfg.damp_const, cfg.spring_len);
     }
 
-    const xVec3 y_axis = { 0.0f, 1.0f, 0.0f };
-
+    xVec3 y_axis = { 0.0f, 1.0f, 0.0f };
     mat.up = y_axis;
-    mat.at = prev_tgt_pos - cam_pos;
 
+    mat.at = prev_tgt_pos - cam_pos;
     xVec3Normalize(&mat.at, &mat.at);
 
     xVec3Cross(&mat.right, &mat.up, &mat.at);
