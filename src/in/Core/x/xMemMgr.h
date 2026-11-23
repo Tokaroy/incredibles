@@ -122,6 +122,11 @@ inline void* xMemPushTemp(U32 amt)
 #define xMEMPUSHTEMP(amt) xMemPushTemp((amt))
 #define xMEMPOPTEMP(pointer) iMemPopTemp((pointer))
 
+inline bool xMemScratchInUse()
+{
+    return scratch_mem_used != 0;
+}
+
 inline void* operator new(size_t size, xMemStaticType, U32)
 {
     return xMEMALLOC(size, 0);

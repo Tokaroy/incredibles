@@ -3,16 +3,22 @@
 
 #include "types.h"
 
-namespace zAsync
+namespace zAsync {
+
+class Screen
 {
-    class Screen
-    {
-    public:
-        virtual void Init() = 0;
-        virtual void Update(F32 dt) = 0;
-        virtual void Render() = 0;
-        virtual void Exit() = 0;
-    };
+public:
+    virtual void Init() = 0;
+    virtual void Update(F32 dt) = 0;
+    virtual void Render() = 0;
+    virtual void Exit() = 0;
+};
+
+void Init(Screen* scr);
+void Allocate();
+void Free();
+void* RenderThread(void*);
+
 } // namespace zAsync
 
 #endif

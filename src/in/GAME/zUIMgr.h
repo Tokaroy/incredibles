@@ -4,5 +4,6 @@
 #include "zUI.h"
 
 void zUIMgrSortList(zUI** list, S32 count);
+void zUIMgrEnableHDR(bool enabled);
 
 #endif
