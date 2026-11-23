@@ -1,20 +1,19 @@
 #include "xCommon.h"
 #include "zMovePoint.h"
 
-#include "zScene.h"
-#include "xMemMgr.h"
 #include "xEvent.h"
+#include "zScene.h"
 
-static zMovePoint* g_mvpt_list = NULL;
-static S32 g_mvpt_cnt = 0;
-
-static S32 MVPT_dflt_chklos(void*, xVec3*, const zMovePoint*); // UNUSED
+static zMovePoint* g_mvpt_list;
+static S32 g_mvpt_cnt;
 
 zMovePoint* zMovePoint_GetMemPool(S32 cnt)
 {
-    g_mvpt_list = (cnt) ? (zMovePoint*)xMEMALLOC(cnt * sizeof(zMovePoint), 0) : NULL;
-    g_mvpt_cnt = cnt;
+    if (!cnt) g_mvpt_list = NULL;
+    else
+        g_mvpt_list = (zMovePoint*)xMEMALLOC(cnt * sizeof(zMovePoint), 0);
 
+    g_mvpt_cnt = cnt;
     return g_mvpt_list;
 }
 
@@ -25,8 +24,7 @@ void zMovePointInit(zMovePoint* m, xMovePointAsset* asset)
     m->eventFunc = zMovePointEventCB;
 
     if (m->linkCount) {
-        m->link = (xLinkAsset*)((U8*)asset + asset->numPoints * sizeof(U32) +
-                                sizeof(xMovePointAsset));
+        m->link = (xLinkAsset*)((U8*)asset + sizeof(xMovePointAsset) + asset->numPoints * sizeof(U32));
     } else {
         m->link = NULL;
     }
@@ -52,9 +50,9 @@ void zMovePointLoad(zMovePoint* ent, xSerial* s)
     xMovePointLoad(ent, s);
 }
 
-void zMovePointReset(zMovePoint* m)
+void zMovePointReset(zMovePoint* ent)
 {
-    xMovePointReset(m);
+    xMovePointReset(ent);
 }
 
 void zMovePointEventCB(xBase*, xBase* to, U32 toEvent, const F32*, xBase*, U32)
@@ -62,6 +60,8 @@ void zMovePointEventCB(xBase*, xBase* to, U32 toEvent, const F32*, xBase*, U32)
     zMovePoint* m = (zMovePoint*)to;
 
     switch (toEvent) {
+    case eEventArrive:
+        break;
     case eEventOn:
         m->on = 1;
         break;
@@ -71,8 +71,6 @@ void zMovePointEventCB(xBase*, xBase* to, U32 toEvent, const F32*, xBase*, U32)
     case eEventReset:
         zMovePointReset(m);
         break;
-    case eEventArrive:
-        break;
     }
 }
 
@@ -80,3 +78,5 @@ xVec3* zMovePointGetPos(const zMovePoint* m)
 {
     return xMovePointGetPos(m);
 }
+
+static S32 MVPT_dflt_chklos(void*, xVec3* mypos, const zMovePoint* mvpt); // UNUSED
