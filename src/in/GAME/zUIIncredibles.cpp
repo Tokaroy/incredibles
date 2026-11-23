@@ -3,14 +3,19 @@
 
 #include "xEvent.h"
 #include "xGlobals.h"
+#include "xMath.h"
 #include "xRand.h"
+#include "xstransvc.h"
 #include "xString.h"
 #include "zBase.h"
+#include "zRenderState.h"
 #include "zScene.h"
 #include "zUI.h"
 #include "zUIImage.h"
 
 #include <stdio.h>
+
+#define MAX_CHECKPOINTS 8
 
 struct Scene
 {
@@ -32,6 +37,10 @@ namespace
     S32 numScenes;
     char sceneBaseImage[32];
     U32 sceneCurrent;
+    U32 sceneCheckPointTotal;
+    U32 sceneCheckPointHit;
+
+    void RenderQuadList(RwIm2DVertex* vertex, U32 count);
 }
 
 zUICustomSceneImage::zUICustomSceneImage(zUI* ui) : zUICustom(ui), counter(NULL)
@@ -77,6 +86,71 @@ void zUICustomSceneImage::UpdateTexture()
     } else {
         ((zUIImage*)ui)->SetTexture(scenes[scene].imageID, false);
     }
+}
+
+zUICustomCheckpoints::zUICustomCheckpoints(zUI* ui) : zUICustom(ui)
+{
+}
+
+void zUICustomCheckpoints::Reset()
+{
+    texture = (RwTexture*)xSTFindAsset(ui->asset->customWidget, NULL);
+}
+
+bool zUICustomCheckpoints::PreRender()
+{
+    if (sceneCheckPointTotal == 0) {
+        return false;
+    }
+
+    RwRaster* raster = RwTextureGetRaster(texture);
+
+    zRenderState(SDRS_Default);
+    RwRenderStateSet(rwRENDERSTATETEXTURERASTER, raster);
+    RwRenderStateSet(rwRENDERSTATEFOGENABLE, (void*)FALSE);
+    RwRenderStateSet(rwRENDERSTATESRCBLEND, (void*)rwBLENDSRCALPHA);
+    RwRenderStateSet(rwRENDERSTATEDESTBLEND, (void*)rwBLENDINVSRCALPHA);
+    RwRenderStateSet(rwRENDERSTATEVERTEXALPHAENABLE, (void*)TRUE);
+    RwRenderStateSet(rwRENDERSTATESHADEMODE, (void*)rwSHADEMODEGOURAUD);
+    RwRenderStateSet(rwRENDERSTATEZWRITEENABLE, (void*)FALSE);
+    RwRenderStateSet(rwRENDERSTATETEXTUREADDRESSU, (void*)rwTEXTUREADDRESSWRAP);
+    RwRenderStateSet(rwRENDERSTATETEXTUREADDRESSV, (void*)rwTEXTUREADDRESSWRAP);
+
+    U32 effectiveCheckpoints = MIN(MAX_CHECKPOINTS, sceneCheckPointTotal);
+
+    RwIm2DVertex vertex[MAX_CHECKPOINTS * 4];
+    F32 widthPerItem = ui->current.width / MAX_CHECKPOINTS;
+    for (U32 i = 0; i < effectiveCheckpoints; i++) {
+        F32 leftX = (ui->current.x + widthPerItem * i) * FB_XRES * (1.0f / 640.0f),
+            bottomY = (ui->current.y + ui->current.height) * FB_YRES * (1.0f / 480.0f),
+            topY = (ui->current.y + (i >= sceneCheckPointHit ? 0.6f * ui->current.height : 0.0f)) * FB_YRES * (1.0f / 480.0f),
+            topV = i >= sceneCheckPointHit ? 0.75f : 1.0f;
+
+        RwIm2DVertexSetScreenX(&vertex[i * 4 + 0], leftX);
+        RwIm2DVertexSetScreenY(&vertex[i * 4 + 0], topY);
+        RwIm2DVertexSetU(&vertex[i * 4 + 0], 0.0f, 0.0f);
+        RwIm2DVertexSetV(&vertex[i * 4 + 0], topV, 0.0f);
+        RwIm2DVertexSetScreenX(&vertex[i * 4 + 1], leftX);
+        RwIm2DVertexSetScreenY(&vertex[i * 4 + 1], bottomY);
+        RwIm2DVertexSetU(&vertex[i * 4 + 1], 0.0f, 0.0f);
+        RwIm2DVertexSetV(&vertex[i * 4 + 1], 1.0f, 0.0f);
+        RwIm2DVertexSetScreenX(&vertex[i * 4 + 2], leftX + 0.75f * widthPerItem * FB_XRES * (1.0f / 640.0f));
+        RwIm2DVertexSetScreenY(&vertex[i * 4 + 2], topY);
+        RwIm2DVertexSetU(&vertex[i * 4 + 2], 1.0f, 0.0f);
+        RwIm2DVertexSetV(&vertex[i * 4 + 2], topV, 0.0f);
+        RwIm2DVertexSetScreenX(&vertex[i * 4 + 3], leftX + 0.75f * widthPerItem * FB_XRES * (1.0f / 640.0f));
+        RwIm2DVertexSetScreenY(&vertex[i * 4 + 3], bottomY);
+        RwIm2DVertexSetU(&vertex[i * 4 + 3], 1.0f, 0.0f);
+        RwIm2DVertexSetV(&vertex[i * 4 + 3], 1.0f, 0.0f);
+    }
+
+    for (S32 i = 0; i < (S32)effectiveCheckpoints * 4; i++) {
+        RwIm2DVertexSetIntRGBA(&vertex[i], ui->current.color.r, ui->current.color.g, ui->current.color.b, ui->current.color.a);
+    }
+
+    RenderQuadList(vertex, effectiveCheckpoints);
+
+    return false;
 }
 
 xTWEAKABLE F32 POWER_EFFECT_MIN_WAIT = 3.0f;

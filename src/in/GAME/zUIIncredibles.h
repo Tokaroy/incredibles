@@ -4,6 +4,8 @@
 #include "zUICustom.h"
 #include "xCounter.h"
 
+struct RwTexture;
+
 namespace stats
 {
     void add(const char* name, F32 value);
@@ -21,6 +23,18 @@ public:
 
 private:
     xCounter* counter;
+};
+
+class zUICustomCheckpoints : public zUICustom
+{
+public:
+    zUICustomCheckpoints(zUI* ui);
+
+    virtual void Reset();
+    virtual bool PreRender();
+
+private:
+    RwTexture* texture;
 };
 
 class zUICustomPowerEffect : public zUICustom
