@@ -35,7 +35,7 @@ struct zScene : xScene
     xBase* baseList[eBaseTypeCount];
     zEnv* zen;
     zSceneParameters* parameters;
-    U8 enableDrawing;
+    bool enableDrawing;
 };
 
 typedef xBase* (*zSceneForAllBaseCallback)(xBase*, zScene*, void*);

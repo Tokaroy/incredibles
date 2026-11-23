@@ -89,8 +89,8 @@ struct xGlobals
     U8 firstStartPressed;
     U8 fromLauncher;
     U8 skipAssertWithController;
-    U8 FlashWIP;
-    U8 inLoadingScreen;
+    bool FlashWIP;
+    bool inLoadingScreen;
     U8 LoadingScene;
     U8 InitializingLoadingScreen;
     U8 ForceMono;

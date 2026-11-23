@@ -100,7 +100,7 @@ struct xCutscene
     XCSNNosey* cb_nosey;
     xCutsceneModelHack* ModelHack;
     bool started;
-    U8 useDefaultTrack;
+    bool useDefaultTrack;
     U32 useDefaultTrackID;
 };
 
