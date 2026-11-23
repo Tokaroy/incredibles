@@ -3,6 +3,7 @@
 
 #include "zUICustom.h"
 #include "xCounter.h"
+#include "xSnd.h"
 
 struct RwTexture;
 
@@ -35,6 +36,19 @@ public:
 
 private:
     RwTexture* texture;
+};
+
+class zUICustomSoundMode : public zUICustom
+{
+public:
+    zUICustomSoundMode(zUI* ui);
+
+    virtual void Reset();
+    virtual bool HandleEvent(xBase* from, U32 toEvent, const F32* toParam, xBase* toParamWidget, U32 toParamWidgetID);
+    virtual void PreUpdate(F32 dt);
+
+private:
+    const char* names[xSndMode_Count];
 };
 
 class zUICustomPowerEffect : public zUICustom

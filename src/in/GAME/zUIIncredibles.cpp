@@ -5,13 +5,17 @@
 #include "xGlobals.h"
 #include "xMath.h"
 #include "xRand.h"
+#include "xSnd.h"
 #include "xstransvc.h"
 #include "xString.h"
+#include "xTextAsset.h"
 #include "zBase.h"
+#include "zGlobals.h"
 #include "zRenderState.h"
 #include "zScene.h"
 #include "zUI.h"
 #include "zUIImage.h"
+#include "zUIText.h"
 
 #include <stdio.h>
 
@@ -151,6 +155,65 @@ bool zUICustomCheckpoints::PreRender()
     RenderQuadList(vertex, effectiveCheckpoints);
 
     return false;
+}
+
+zUICustomSoundMode::zUICustomSoundMode(zUI* ui) : zUICustom(ui)
+{
+}
+
+void zUICustomSoundMode::Reset()
+{
+    for (U32 i = 0; i < xSndMode_Count; i++) {
+        names[i] = xTextFindString(ui->GetAsset()->customWidget + i, NULL);
+    }
+}
+
+void zUICustomSoundMode::PreUpdate(F32)
+{
+    ((zUIText*)ui)->SetText(names[gSnd.sndMode]);
+}
+
+bool zUICustomSoundMode::HandleEvent(xBase*, U32 toEvent, const F32*, xBase*, U32)
+{
+    switch (toEvent) {
+    case eEventIncrement:
+        if (globals.ForceMono) {
+            ui->Signal(eEventIncrementFailed);
+            return false;
+        }
+
+        if (gSnd.sndMode != xSndMode_Mono) {
+            S32 oldMode = gSnd.sndMode, newMode = gSnd.sndMode + 1;
+            if (newMode >= xSndMode_Count)
+                newMode = xSndMode_Count - 1;
+            if (newMode != gSnd.sndMode)
+                xSndSetMode((xSndMode)newMode);
+            ui->Signal(oldMode != newMode ? eEventIncrementSuccess : eEventIncrementFailed);
+        } else {
+            ui->Signal(eEventIncrementFailed);
+        }
+        break;
+
+    case eEventDecrement:
+        if (globals.ForceMono) {
+            ui->Signal(eEventDecrementFailed);
+            return false;
+        }
+
+        if (gSnd.sndMode != xSndMode_Mono && gSnd.sndMode != xSndMode_Stereo) {
+            S32 oldMode = gSnd.sndMode, newMode = gSnd.sndMode - 1;
+            if (newMode < 0)
+                newMode = 0;
+            if (newMode != gSnd.sndMode)
+                xSndSetMode((xSndMode)newMode);
+            ui->Signal(oldMode != newMode ? eEventDecrementSuccess : eEventDecrementFailed);
+        } else {
+            ui->Signal(eEventDecrementFailed);
+        }
+        break;
+    }
+
+    return true;
 }
 
 xTWEAKABLE F32 POWER_EFFECT_MIN_WAIT = 3.0f;
