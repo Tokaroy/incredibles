@@ -1,17 +1,15 @@
 #ifndef ZPARTICLESYSTEMWATERFALL_H
 #define ZPARTICLESYSTEMWATERFALL_H
 
-#include "zParticleSystems.h"
 #include "xParticleBatch.h"
+#include "zParticleGenerator.h"
 
 class zParticleSystemWaterfall : public zParticleSystem
 {
-public:
-    zParticleSystemWaterfall() : zParticleSystem(1, 17)
-    {
-    }
-
     xParticleBatchGroup batch_group;
+
+public:
+    zParticleSystemWaterfall() : zPARTICLESYSTEM(zParticleAsset::SYSTEM_WATERFALL, NEED_SCENE_ENTER | NEED_UPDATE) {}
 
     virtual zParticleGenerator* create_generator(zParticleAsset& asset);
     virtual void scene_enter();
@@ -21,12 +19,10 @@ public:
 
 class zParticleSystemWaterfallMist : public zParticleSystem
 {
-public:
-    zParticleSystemWaterfallMist() : zParticleSystem(2, 17)
-    {
-    }
-
     xParticleBatchGroup batch_group;
+
+public:
+    zParticleSystemWaterfallMist() : zPARTICLESYSTEM(zParticleAsset::SYSTEM_WATERFALL_MIST, NEED_SCENE_ENTER | NEED_UPDATE) {}
 
     virtual zParticleGenerator* create_generator(zParticleAsset& asset);
     virtual void scene_enter();
@@ -36,12 +32,10 @@ public:
 
 class zParticleSystemWaterfallSplash : public zParticleSystem
 {
-public:
-    zParticleSystemWaterfallSplash() : zParticleSystem(3, 17)
-    {
-    }
-
     xParticleBatchGroup batch_group;
+
+public:
+    zParticleSystemWaterfallSplash() : zPARTICLESYSTEM(zParticleAsset::SYSTEM_WATERFALL_SPLASH, NEED_SCENE_ENTER | NEED_UPDATE) {}
 
     virtual zParticleGenerator* create_generator(zParticleAsset& asset);
     virtual void scene_enter();

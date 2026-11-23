@@ -1,128 +1,69 @@
 #ifndef ZPARTICLEGENERATOR_H
 #define ZPARTICLEGENERATOR_H
 
-#include "xDynAsset.h"
-#include "xMath3.h"
+#include "xBase.h"
+#include "xEnt.h"
+#include "zParticleAsset.h"
 
-struct zParticleAsset : xDynAsset
+struct zParticleGenerator;
+
+class zParticleSystem
 {
-    struct attach_fixed_data
+public:
+    struct relative_ordering
     {
+        S32 other;
+        bool before_other;
     };
 
-    struct attach_entity_data
+    // need
+    enum
     {
-        U32 entity;
-        U8 bone;
-        U8 pad1;
-        U8 pad2;
-        U8 pad3;
+        NEED_SCENE_ENTER = 0x1,
+        NEED_SCENE_EXIT = 0x2,
+        NEED_SETUP = 0x4,
+        NEED_RESET = 0x8,
+        NEED_UPDATE = 0x10,
+        NEED_PRE_RENDER = 0x20,
+        NEED_RENDER = 0x40
     };
 
-    struct attach_entity_tag_data
-    {
-        U32 entity;
-        xVec3 tag;
-    };
+    S32 type;
+    S32 need;
+    zParticleGenerator** generators;
+    S32 generators_size;
+    S32 generators_active;
 
-    struct motion_none_data
-    {
-    };
+    virtual zParticleGenerator* create_generator(zParticleAsset& asset) = 0;
+    virtual void destroy_generator(zParticleGenerator*) {}
+    virtual void scene_enter() {}
+    virtual void scene_exit() {}
+    virtual void setup() {}
+    virtual void reset() {}
+    virtual void update(F32 dt) {}
+    virtual void pre_render() {}
+    virtual void render() {}
+    virtual relative_ordering* get_ordering(S32& size, S32) { size = 0; return NULL; }
+    virtual S32 get_asset_size() const = 0;
 
-    struct motion_spiral_data
-    {
-        U8 flags;
-        U8 points;
-        U8 pad1;
-        U8 pad2;
-        F32 radius_inner;
-        F32 radius_outer;
-        F32 duration;
-        F32 frequency;
-    };
-
-    struct volume_point_data
-    {
-    };
-
-    struct volume_sphere_data
-    {
-        F32 radius;
-    };
-
-    struct volume_circle_data
-    {
-        F32 radius;
-        F32 arc_length;
-    };
-
-    struct volume_line_data
-    {
-        U8 flags;
-        U8 pad1;
-        U8 pad2;
-        U8 pad3;
-        F32 radius;
-        F32 length;
-    };
-
-    struct volume_model_data
-    {
-        U8 flags;
-        U8 exclude;
-        U8 pad1;
-        U8 pad2;
-        F32 expand;
-    };
-
-    union attach_data
-    {
-        attach_fixed_data fixed;
-        attach_entity_data entity;
-        attach_entity_tag_data entity_tag;
-    };
-
-    union motion_data
-    {
-        motion_none_data none;
-        motion_spiral_data spiral;
-    };
-
-    union volume_data
-    {
-        volume_point_data point;
-        volume_sphere_data sphere;
-        volume_circle_data circle;
-        volume_line_data line;
-        volume_model_data model;
-    };
-
-    U8 flags;
-    U8 attach_flags;
-    U8 motion_flags;
-    U8 volume_flags;
-    F32 rate;
-    U32 texture;
-    U8 attach_type;
-    U8 motion_type;
-    U8 volume_type;
-    U8 system_type;
-    xVec3 location;
-    struct
-    {
-        F32 yaw;
-        F32 pitch;
-        F32 roll;
-    } axis;
-    attach_data attach;
-    motion_data motion;
-    volume_data volume;
+    zParticleSystem(S32 type, S32 need) : type(type), need(need) {}
 };
+
+#define zPARTICLESYSTEM(type, need) zParticleSystem(type, need)
 
 struct zParticleGenerator : xBase
 {
     zParticleAsset* asset;
     S32 flags;
+
+    void create(zParticleSystem& system, zParticleAsset& asset);
+    virtual void reset();
+    virtual void activate();
+    virtual void deactivate();
+    static void event_handler(xBase* from, xBase* to, U32 event, const F32* argf, xBase* toParamWidget,
+                              U32 toParamWidgetID);
+    static xEnt* get_attach_entity(const zParticleAsset& asset);
+    static void perturb_dir(xVec3& dir, F32 angle);
 };
 
 #endif
