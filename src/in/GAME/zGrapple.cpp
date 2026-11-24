@@ -1,16 +1,13 @@
 #include "xCommon.h"
 #include "zGrapple.h"
 
-#include "zScene.h"
-#include "xGroup.h"
-#include "xstransvc.h"
-#include "xMarkerAsset.h"
+#include "xEnt.h"
 #include "xEvent.h"
+#include "xGroup.h"
+#include "zBase.h"
+#include "zScene.h"
 
-static zGrapplePoint* sGrapplePoints = NULL;
-static S32 sNumGrapplePoints = 0;
-
-void zGrapple_Init(xBase& data, xDynAsset& asset, size_t)
+void zGrapple_Init(xBase& data, xDynAsset& asset, size_t asset_size)
 {
     zGrapple_Init((zGrapple*)&data, (zGrappleAsset*)&asset);
 }
@@ -22,56 +19,57 @@ void zGrapple_Init(zGrapple* grapple, zGrappleAsset* asset)
     grapple->grappleAsset = asset;
     grapple->eventFunc = zGrapple_EventCB;
 
-    if (grapple->linkCount) {
+    if (grapple->linkCount)
         grapple->link = (xLinkAsset*)(asset + 1);
-    } else {
+    else
         grapple->link = NULL;
-    }
 }
+
+static zGrapplePoint* sGrapplePoints;
+static S32 sNumGrapplePoints;
 
 S32 zGrapple_Recurse(U32 id, zGrapplePoint* gpList, zGrapple* grapple)
 {
     U32 i;
     S32 result = 0;
     xBase* base = zSceneFindObject(id);
-
     if (base) {
         if (base->baseType == eBaseTypeGroup) {
             xGroup* group = (xGroup*)base;
             U32 count = xGroupGetCount(group);
-
             for (i = 0; i < count; i++) {
                 U32 memberID = xGroupGetItem(group, i);
-                S32 incr = gpList ? zGrapple_Recurse(memberID, &gpList[result], grapple) :
-                                      zGrapple_Recurse(memberID, NULL, NULL);
-
+                S32 incr;
+                if (gpList) {
+                    incr = zGrapple_Recurse(memberID, &gpList[result], grapple);
+                } else {
+                    incr = zGrapple_Recurse(memberID, NULL, NULL);
+                }
                 result += incr;
             }
-        } else if (base->baseFlags & k_XBASE_IS_ENTITY) {
+        }
+        else if (base->baseFlags & k_XBASE_IS_ENTITY) {
             if (gpList) {
-                gpList[0].pos = (xVec3*)&((xEnt*)base)->model->Mat->pos;
-                gpList[0].local = (xMat3x3*)((xEnt*)base)->model->Mat;
-                gpList[0].offset = &grapple->grappleAsset->offset;
-                gpList[0].optr = base;
-                gpList[0].grap = grapple;
+                gpList[result].pos = (xVec3*)&((xEnt*)base)->model->Mat->pos;
+                gpList[result].local = (xMat3x3*)((xEnt*)base)->model->Mat;
+                gpList[result].offset = &grapple->grappleAsset->offset;
+                gpList[result].optr = base;
+                gpList[result].grap = grapple;
             }
-
-            result = 1;
+            result++;
         }
     } else {
         U32 size;
-        void* data = xSTFindAsset(id, &size);
-
-        if (size == sizeof(xMarkerAsset)) {
+        base = (xBase*)xSTFindAsset(id, &size);
+        if (size == sizeof(xVec3)) {
             if (gpList) {
-                gpList[0].pos = &((xMarkerAsset*)data)->pos;
-                gpList[0].local = NULL;
-                gpList[0].offset = NULL;
-                gpList[0].optr = data;
-                gpList[0].grap = grapple;
+                gpList[result].pos = (xVec3*)base;
+                gpList[result].local = NULL;
+                gpList[result].offset = NULL;
+                gpList[result].optr = base;
+                gpList[result].grap = grapple;
             }
-
-            result = 1;
+            result++;
         }
     }
 
@@ -80,13 +78,13 @@ S32 zGrapple_Recurse(U32 id, zGrapplePoint* gpList, zGrapple* grapple)
 
 void zGrapple_SceneInit(zScene* zsc)
 {
-    S32 i;
-    S32 count = zsc->baseCount[eBaseTypeGrapple];
-    S32 numGrapples = 0;
+    S32 i, count, numGrapples = 0;
     zGrapple* grapple;
+    zGrappleAsset* asset;
 
+    count = zsc->baseCount[eBaseTypeGrapple];
     for (i = 0; i < count; i++) {
-        grapple = (zGrapple*)zsc->baseList[eBaseTypeGrapple] + i;
+        grapple = &((zGrapple*)zsc->baseList[eBaseTypeGrapple])[i];
         numGrapples += zGrapple_Recurse(grapple->grappleAsset->object, NULL, NULL);
     }
 
@@ -94,27 +92,24 @@ void zGrapple_SceneInit(zScene* zsc)
     sNumGrapplePoints = numGrapples;
 
     numGrapples = 0;
-
     for (i = 0; i < count; i++) {
-        grapple = (zGrapple*)zsc->baseList[eBaseTypeGrapple] + i;
-        numGrapples +=
-            zGrapple_Recurse(grapple->grappleAsset->object, sGrapplePoints + numGrapples, grapple);
+        grapple = &((zGrapple*)zsc->baseList[eBaseTypeGrapple])[i];
+        numGrapples += zGrapple_Recurse(grapple->grappleAsset->object, &sGrapplePoints[numGrapples], grapple);
     }
 
     for (i = 0; i < sNumGrapplePoints; i++) {
         grapple = sGrapplePoints[i].grap;
-        grapple->flags = grapple->grappleAsset->grapFlags;
+        asset = grapple->grappleAsset;
+        grapple->flags = asset->grapFlags;
     }
 }
 
 void zGrapple_Reset()
 {
-    S32 i;
-    zGrapple* grapple;
-
-    for (i = 0; i < sNumGrapplePoints; i++) {
-        grapple = sGrapplePoints[i].grap;
-        grapple->flags = grapple->grappleAsset->grapFlags;
+    for (S32 i = 0; i < sNumGrapplePoints; i++) {
+        zGrapple* grapple = sGrapplePoints[i].grap;
+        zGrappleAsset* asset = grapple->grappleAsset;
+        grapple->flags = asset->grapFlags;
     }
 }
 
@@ -124,10 +119,10 @@ void zGrapple_EventCB(xBase*, xBase* to, U32 toEvent, const F32*, xBase*, U32)
 
     switch (toEvent) {
     case eEventOn:
-        grap->flags |= 0x1;
+        grap->flags |= 1;
         break;
     case eEventOff:
-        grap->flags &= ~0x1;
+        grap->flags &= ~1;
         break;
     }
 }

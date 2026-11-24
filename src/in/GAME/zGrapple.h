@@ -1,9 +1,11 @@
 #ifndef ZGRAPPLE_H
 #define ZGRAPPLE_H
 
-#include "xDynAsset.h"
+#include "xBase.h"
 #include "zGrappleAsset.h"
-#include "xMath3.h"
+
+struct xMat3x3;
+struct zScene;
 
 struct zGrapple : xBase
 {
@@ -20,9 +22,7 @@ struct zGrapplePoint
     void* optr;
 };
 
-struct zScene;
-
-void zGrapple_Init(xBase& data, xDynAsset& asset, size_t);
+void zGrapple_Init(xBase& data, xDynAsset& asset, size_t asset_size);
 void zGrapple_Init(zGrapple* grapple, zGrappleAsset* asset);
 S32 zGrapple_Recurse(U32 id, zGrapplePoint* gpList, zGrapple* grapple);
 void zGrapple_SceneInit(zScene* zsc);
