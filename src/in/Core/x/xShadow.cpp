@@ -339,11 +339,11 @@ void xShadowReceiveShadow(xEnt* ent, F32 shadowFactor, S32 shadowMode, RwMatrix*
                         RwV3dSub(&b, (RwV3d*)v2, (RwV3d*)v0);
                         RwV3dCrossProduct(&c, &a, &b);
                         RwReal len = RwV3dLength(&c);
-                        if (xabs(len) < 0.00001f) {
+                        if (xabs(len) < EPSILON) {
                             if (len < 0.0f) {
-                                len = -0.00001f;
+                                len = -EPSILON;
                             } else {
-                                len = 0.00001f;
+                                len = EPSILON;
                             }
                         }
 
@@ -803,23 +803,23 @@ static RpCollisionTriangle* shadowCacheEnvCB(RpIntersection*, RpWorldSector*, Rp
     F32 n2z = poly->vert[0].x - poly->vert[2].x;
     F32 n2d = n2x * (cache->pos.x - poly->vert[2].x) + n2z * (cache->pos.z - poly->vert[2].z);
 
-    if (n0d <= 0.00001f && n1d <= 0.00001f && n2d <= 0.00001f) {
+    if (n0d <= EPSILON && n1d <= EPSILON && n2d <= EPSILON) {
         cache->polyRayDepth[0] = MAX(depth0, cache->polyRayDepth[0]);
     }
 
-    if (n0d + 0.5f * n0x * cache->radius <= 0.00001f && n1d + 0.5f * n1x * cache->radius <= 0.00001f && n2d + 0.5f * n2x * cache->radius <= 0.00001f) {
+    if (n0d + 0.5f * n0x * cache->radius <= EPSILON && n1d + 0.5f * n1x * cache->radius <= EPSILON && n2d + 0.5f * n2x * cache->radius <= EPSILON) {
         cache->polyRayDepth[1] = MAX(depth0 + 0.5f * dydx * cache->radius, cache->polyRayDepth[1]);
     }
 
-    if (n0d - 0.5f * n0x * cache->radius <= 0.00001f && n1d - 0.5f * n1x * cache->radius <= 0.00001f && n2d - 0.5f * n2x * cache->radius <= 0.00001f) {
+    if (n0d - 0.5f * n0x * cache->radius <= EPSILON && n1d - 0.5f * n1x * cache->radius <= EPSILON && n2d - 0.5f * n2x * cache->radius <= EPSILON) {
         cache->polyRayDepth[2] = MAX(depth0 - 0.5f * dydx * cache->radius, cache->polyRayDepth[2]);
     }
 
-    if (n0d + 0.5f * n0z * cache->radius <= 0.00001f && n1d + 0.5f * n1z * cache->radius <= 0.00001f && n2d + 0.5f * n2z * cache->radius <= 0.00001f) {
+    if (n0d + 0.5f * n0z * cache->radius <= EPSILON && n1d + 0.5f * n1z * cache->radius <= EPSILON && n2d + 0.5f * n2z * cache->radius <= EPSILON) {
         cache->polyRayDepth[3] = MAX(depth0 + 0.5f * dydz * cache->radius, cache->polyRayDepth[3]);
     }
 
-    if (n0d - 0.5f * n0z * cache->radius <= 0.00001f && n1d - 0.5f * n1z * cache->radius <= 0.00001f && n2d - 0.5f * n2z * cache->radius <= 0.00001f) {
+    if (n0d - 0.5f * n0z * cache->radius <= EPSILON && n1d - 0.5f * n1z * cache->radius <= EPSILON && n2d - 0.5f * n2z * cache->radius <= EPSILON) {
         cache->polyRayDepth[4] = MAX(depth0 - 0.5f * dydz * cache->radius, cache->polyRayDepth[4]);
     }
 
@@ -923,7 +923,7 @@ static S32 shadowCacheLeafCB(S32 numTriangles, S32 triOffset, void* data)
         xVec3Cross(&trinorm, &aa, &bb);
         xVec3Normalize(&trinorm, &trinorm);
 
-        denom = xabs(trinorm.y) > 0.00001f ? trinorm.y : 0.00001f;
+        denom = xabs(trinorm.y) > EPSILON ? trinorm.y : EPSILON;
 
         dydx = -trinorm.x / denom;
         dydz = -trinorm.z / denom;
@@ -941,7 +941,7 @@ static S32 shadowCacheLeafCB(S32 numTriangles, S32 triOffset, void* data)
         n2z = worldV[0].x - worldV[2].x;
         n2d = n2x * (cache->pos.x - worldV[2].x) + n2z * (cache->pos.z - worldV[2].z);
 
-        if (n0d <= 0.00001f && n1d <= 0.00001f && n2d <= 0.00001f) {
+        if (n0d <= EPSILON && n1d <= EPSILON && n2d <= EPSILON) {
             depthtest = depth0;
             if (depthtest > cache->polyRayDepth[0]) {
                 cbparam->rayCloser[0] = cbparam->ent;
@@ -949,7 +949,7 @@ static S32 shadowCacheLeafCB(S32 numTriangles, S32 triOffset, void* data)
             }
         }
 
-        if (n0d + 0.5f * n0x * cache->radius <= 0.00001f && n1d + 0.5f * n1x * cache->radius <= 0.00001f && n2d + 0.5f * n2x * cache->radius <= 0.00001f) {
+        if (n0d + 0.5f * n0x * cache->radius <= EPSILON && n1d + 0.5f * n1x * cache->radius <= EPSILON && n2d + 0.5f * n2x * cache->radius <= EPSILON) {
             depthtest = depth0 + 0.5f * dydx * cache->radius;
             if (depthtest > cache->polyRayDepth[1]) {
                 cbparam->rayCloser[1] = cbparam->ent;
@@ -957,7 +957,7 @@ static S32 shadowCacheLeafCB(S32 numTriangles, S32 triOffset, void* data)
             }
         }
 
-        if (n0d - 0.5f * n0x * cache->radius <= 0.00001f && n1d - 0.5f * n1x * cache->radius <= 0.00001f && n2d - 0.5f * n2x * cache->radius <= 0.00001f) {
+        if (n0d - 0.5f * n0x * cache->radius <= EPSILON && n1d - 0.5f * n1x * cache->radius <= EPSILON && n2d - 0.5f * n2x * cache->radius <= EPSILON) {
             depthtest = depth0 - 0.5f * dydx * cache->radius;
             if (depthtest > cache->polyRayDepth[2]) {
                 cbparam->rayCloser[2] = cbparam->ent;
@@ -965,7 +965,7 @@ static S32 shadowCacheLeafCB(S32 numTriangles, S32 triOffset, void* data)
             }
         }
 
-        if (n0d + 0.5f * n0z * cache->radius <= 0.00001f && n1d + 0.5f * n1z * cache->radius <= 0.00001f && n2d + 0.5f * n2z * cache->radius <= 0.00001f) {
+        if (n0d + 0.5f * n0z * cache->radius <= EPSILON && n1d + 0.5f * n1z * cache->radius <= EPSILON && n2d + 0.5f * n2z * cache->radius <= EPSILON) {
             depthtest = depth0 + 0.5f * dydz * cache->radius;
             if (depthtest > cache->polyRayDepth[3]) {
                 cbparam->rayCloser[3] = cbparam->ent;
@@ -973,7 +973,7 @@ static S32 shadowCacheLeafCB(S32 numTriangles, S32 triOffset, void* data)
             }
         }
 
-        if (n0d - 0.5f * n0z * cache->radius <= 0.00001f && n1d - 0.5f * n1z * cache->radius <= 0.00001f && n2d - 0.5f * n2z * cache->radius <= 0.00001f) {
+        if (n0d - 0.5f * n0z * cache->radius <= EPSILON && n1d - 0.5f * n1z * cache->radius <= EPSILON && n2d - 0.5f * n2z * cache->radius <= EPSILON) {
             depthtest = depth0 - 0.5f * dydz * cache->radius;
             if (depthtest > cache->polyRayDepth[4]) {
                 cbparam->rayCloser[4] = cbparam->ent;

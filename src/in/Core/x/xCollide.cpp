@@ -343,7 +343,7 @@ static RpCollisionTriangle* sphereHitsEnvCB(RpIntersection* isx, RpWorldSector* 
 
     if (coll->flags & 0x800) {
         F32 scale = 1.0f - radius / coll->dist;
-        scale -= 1e-5f;
+        scale -= EPSILON;
 
         xVec3Copy(&coll->depen, &tohit);
         xVec3SMulBy(&coll->depen, scale);
@@ -418,7 +418,7 @@ U32 xSphereHitsModel(const xSphere* b, const xModelInstance* m, xCollis* coll)
 
         F32 mag2 = coll->norm.length2();
 
-        if (mag2 && !xeq(mag2, 1.0f, 1e-5f)) {
+        if (mag2 && !xeq(mag2, 1.0f, EPSILON)) {
             coll->norm *= 1.0f / xsqrt(mag2);
         }
     }
@@ -501,8 +501,8 @@ static S32 xParabolaEnvCB(xClumpCollBSPTriangle* triangles, void* data)
                     b = N.x * p->initVel.x + N.y * p->initVel.y + N.z * p->initVel.z;
                     c = pdist + (N.x * p->initPos.x + N.y * p->initPos.y + N.z * p->initPos.z);
 
-                    if (a < 1e-5f && a > -1e-5f) {
-                        if (b > 1e-5f || b < -1e-5f) {
+                    if (a < EPSILON && a > -EPSILON) {
+                        if (b > EPSILON || b < -EPSILON) {
                             t1 = -c / b;
                         }
                     } else {
@@ -602,7 +602,7 @@ S32 xParabolaHitsEnv(xParabola* p, const xEnv* env, xCollis* colls)
         xb.sup.y = tmp;
     }
 
-    if (p->gravity > 1e-5f || p->gravity < -1e-5f) {
+    if (p->gravity > EPSILON || p->gravity < -EPSILON) {
         F32 extremumT = p->initVel.y / p->gravity;
         if (p->minTime < extremumT && extremumT < p->maxTime) {
             F32 extremum = p->initPos.y + extremumT * (p->initVel.y - 0.5f * p->gravity * extremumT);
@@ -622,7 +622,7 @@ S32 xParabolaHitsEnv(xParabola* p, const xEnv* env, xCollis* colls)
     data.N.y = 0.0f;
     data.N.z = p->initVel.x;
 
-    if (data.N.x < 1e-5f && data.N.x > -1e-5f && data.N.z < 1e-5f && data.N.z > -1e-5f) {
+    if (data.N.x < EPSILON && data.N.x > -EPSILON && data.N.z < EPSILON && data.N.z > -EPSILON) {
         data.N.x = 1.0f;
         data.N.z = 0.0f;
     }
@@ -690,7 +690,7 @@ static RpCollisionTriangle* CapsuleEnvClosestToLineCB(RpIntersection*, RpWorldSe
 
     colls->dist = d2;
 
-    if (xabs(d2) <= 1e-5f && t > colls->tuv.t) {
+    if (xabs(d2) <= EPSILON && t > colls->tuv.t) {
         return tri;
     }
 
@@ -794,8 +794,8 @@ S32 xCapsuleIsectsModelClosestToLine(const xCapsule* c, const xModelInstance* mo
         colls->dist = xsqrt(colls->dist);
         colls->dist *= mscale;
         xMat3x3RMulVec(&colls->tohit, &mat, &colls->tohit);
-        if (xabs(colls->dist) <= 1e-5f) {
-            colls->dist = 1e-5f;
+        if (xabs(colls->dist) <= EPSILON) {
+            colls->dist = EPSILON;
         }
 
         F32 s = 1.0f / colls->dist;
@@ -893,7 +893,7 @@ S32 xCapsuleIsectsSceneClosestToLine(const xCapsule* c, xScene* sc, xCollis* col
     xVec3Copy(&ray.origin, &ln.p1);
     xVec3Sub(&ray.dir, &ln.p2, &ln.p1);
     ray.max_t = xVec3Length(&ray.dir);
-    F32 one_len = 1.0f / MAX(ray.max_t, 0.00001f);
+    F32 one_len = 1.0f / MAX(ray.max_t, EPSILON);
     xVec3SMul(&ray.dir, &ray.dir, one_len);
     ray.flags = XRAY3_USE_MAX;
 
@@ -950,7 +950,7 @@ U32 xBoxHitsSphere(const xBox* a, const xSphere* b, xCollis* coll)
 #define NORMALIZE_AXIS(axis, extent)                                                              \
 {                                                                                                 \
     F32 _mag = xsqr((axis).x) + xsqr((axis).y) + xsqr((axis).z);                                  \
-    if (xabs(_mag - 1.0f) > 1e-6f && _mag > 1e-5f) {                                              \
+    if (xabs(_mag - 1.0f) > 1e-6f && _mag > EPSILON) {                                            \
         _mag = xsqrt(_mag);                                                                       \
         (extent) *= _mag;                                                                         \
         _mag = 1.0f / _mag;                                                                       \

@@ -29,7 +29,7 @@ xLightKit* xLightKit_Prepare(void* data)
             F32 s =
                 MAX3(currlight->color.red, currlight->color.green, currlight->color.blue);
 
-            s = 1.0f / MAX(s, 0.00001f);
+            s = 1.0f / MAX(s, EPSILON);
 
             currlight->color.red *= s;
             currlight->color.green *= s;
