@@ -33,7 +33,7 @@ void zCamFP::create()
     xCam::create();
     coord_type = XCAM_COORD_CART;
     orient_type = XCAM_ORIENT_EULER;
-    cfg_common.priority = 0x81;
+    cfg_common.priority = 129;
 }
 
 void zCamFP::start()
@@ -42,7 +42,7 @@ void zCamFP::start()
     CopyPosFromPlayer(ZPLAYER);
     CopyYawFromPlayer(ZPLAYER);
     orient.euler.pitch = 0.0f;
-    cfg_common.priority = 0x81;
+    cfg_common.priority = 129;
 }
 
 void zCamFP::stop()

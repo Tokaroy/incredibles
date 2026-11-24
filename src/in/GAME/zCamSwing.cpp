@@ -13,7 +13,7 @@ void zCamSwing::create()
     xCam::create();
     coord_type = XCAM_COORD_CYLINDER;
     orient_type = XCAM_ORIENT_EULER;
-    cfg_common.priority = 0x81;
+    cfg_common.priority = 129;
     get_target(&coord.cylinder.origin);
     losbar.cfg.rail_ymin = 0.0f;
     losbar.cfg.rail_ymax = 0.0f;
@@ -173,7 +173,7 @@ void zCamSwing::start()
     distOffset = coord.cylinder.dist - pref[0].dist;
     refresh_mat();
     losbar.reset(coord.cylinder.origin, mat.pos);
-    cfg_common.priority = 0x81;
+    cfg_common.priority = 129;
 }
 
 void zCamSwing::update(xScene&, F32 dt)

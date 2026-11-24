@@ -55,7 +55,7 @@ void zZipLineEventCB(xBase*, xBase* to, U32 toEvent, const F32*, xBase*, U32)
 
 void zZipLineCam::load_cfg()
 {
-    cfg_common.priority = 0x80;
+    cfg_common.priority = 128;
     cfg_common.blend_time = 1.0f;
 
     cfg.speed_move = 10.0f;
