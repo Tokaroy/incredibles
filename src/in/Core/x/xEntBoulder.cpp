@@ -648,11 +648,13 @@ void xEntBoulderEventCB(xBase* from, xBase* to, U32 toEvent, const F32* toParam,
         }
         break;
     case eEventLaunchShrapnel:
+    {
         zShrapnelAsset* shrap = (zShrapnelAsset*)toParamWidget;
         if (shrap && shrap->initCB) {
             shrap->initCB(shrap, s->model, &s->vel, NULL);
         }
         break;
+    }
     case eEventSetLightKit:
         xModelSetLightKit(s->model, (xLightKit*)toParamWidget);
         break;

@@ -124,9 +124,11 @@ void zEntHangableEventCB(xBase* from, xBase* to, U32 toEvent, const F32* toParam
         zEntHangable_Reset(ent);
         break;
     case eEventSwingerFollow:
+    {
         zEnt* follow = (zEnt*)from;
         zEntHangable_SetFollow(ent, follow);
         break;
+    }
     case eEventSetUpdateDistance:
         if (globals.updateMgr) {
             if (toParam[0] <= 0.0f) {

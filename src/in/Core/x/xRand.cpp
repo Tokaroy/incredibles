@@ -129,6 +129,7 @@ U32 xrand_RandomChoice(U32& chosenMask, U8& setBits, U32 maxCount, xRandomChoice
         choice = xrand_RandomChoice(maxCount);
         break;
     case xRandomChoiceRule_ANY_NOT_CHOSEN:
+    {
         U32 ithUnplayed = xrand_RandomChoice(maxCount - setBits) + 1;
         U32 testMask = 1;
         for (;;) {
@@ -152,6 +153,7 @@ U32 xrand_RandomChoice(U32& chosenMask, U8& setBits, U32 maxCount, xRandomChoice
             }
         }
         break;
+    }
     case xRandomChoiceRule_IN_ORDER:
         choice = setBits;
         chosenMask |= 1 << choice;

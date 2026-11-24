@@ -112,6 +112,7 @@ static S32 DisplayMessage(TRCState state)
         message_text = NULL;
         break;
     case TRC_PadMissing:
+    {
         if (!pad_message_valid()) {
             return FALSE;
         }
@@ -130,6 +131,7 @@ static S32 DisplayMessage(TRCState state)
             composed_message_text[len_message_text - 2] = '\0';
         }
         break;
+    }
     case TRC_PadInvalidType:
         message_text = k_CONTROLLER_INVALID_MESSAGE;
         break;
