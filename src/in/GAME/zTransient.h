@@ -1,34 +1,43 @@
 #ifndef ZTRANSIENT_H
 #define ZTRANSIENT_H
 
-#include "zHitParameters.h"
 #include "xBound.h"
+#include "zHitParameters.h"
 
 struct zFlame;
 
-namespace zTransient
+// zTransient::damage_result::type
+#define k_ZTRANSIENT_TYPE_FLAME 0x1
+#define k_ZTRANSIENT_TYPE_EXPLOSION 0x2
+#define k_ZTRANSIENT_TYPE_ALL 0x3
+
+namespace zTransient {
+
+struct instance_data;
+
+struct damage_result
 {
-    struct instance_data
+    S32 type;
+    F32 damage;
+    F32 knockback;
+    zHitSource source;
+    xBound bound;
+    union
     {
+        void* object;
+        zFlame* flame;
+        instance_data* explosion;
     };
+};
 
-    struct damage_result
-    {
-        S32 type;
-        F32 damage;
-        F32 knockback;
-        zHitSource source;
-        xBound bound;
-        union
-        {
-            void* object;
-            zFlame* flame;
-            instance_data* explosion;
-        };
-    };
+void scene_enter();
+void scene_exit();
+void setup();
+void reset();
+void update(F32 dt);
+void render();
+S32 check_damage(damage_result* results, const xBox& box, S32 max_results, S32 coll_type, S32 type_filter);
 
-    S32 check_damage(damage_result* results, const xBox& box, S32 max_results, S32,
-                       S32 type_filter);
-} // namespace zTransient
+}
 
 #endif

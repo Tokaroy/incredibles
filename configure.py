@@ -740,7 +740,7 @@ config.libs = [
             GameObject(NonMatching, "in/GAME/zTextBox.cpp"),
             GameObject(NonMatching, "in/GAME/zTrainCar.cpp"),
             GameObject(Matching, "in/GAME/zTrainPath.cpp"),
-            GameObject(NonMatching, "in/GAME/zTransient.cpp"),
+            GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zTransient.cpp"),
             GameObject(NonMatching, "in/GAME/zTurret.cpp"),
             GameObject(NonMatching, "in/GAME/zUI.cpp"),
             GameObject(NonMatching, "in/GAME/zUIBox.cpp"),
