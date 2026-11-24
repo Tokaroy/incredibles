@@ -673,7 +673,7 @@ void xEntReset(xEnt* ent)
 
         minst = ent->model;
         xBox* combinedAnimBound = &minst->combinedAnimBound;
-        combinedAnimBound->upper.x = -1e38f;
+        combinedAnimBound->upper.x = -HUGE;
         while (minst) {
             U16 old_flags = minst->Flags;
             minst->Flags |= ModelInstance_Render;
@@ -1230,7 +1230,7 @@ void xEntBeginCollide(xEnt* ent, xScene*, F32)
         coll->flags = 0x1f00;
         coll->optr = NULL;
         coll->mptr = NULL;
-        coll->dist = 1e38f;
+        coll->dist = HUGE;
     }
 
     ent->collis->idx = 6;
