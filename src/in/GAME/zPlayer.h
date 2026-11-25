@@ -109,15 +109,9 @@ struct zPlayer : zEnt
 
     virtual bool IsInteractioning();
 
-    bool Get_floor_collision() const
-    {
-        return (zPlayerFlags >> 2) & 0x1;
-    }
+    bool Get_floor_collision() const { return (zPlayerFlags >> 2) & 0x1; }
 
-    bool Get_collisionOn() const
-    {
-        return (zPlayerFlags >> 4) & 0x1;
-    }
+    bool Get_collisionOn() const { return (zPlayerFlags >> 4) & 0x1; }
 
     virtual void SetEnemyIsNear(bool isit);
 
