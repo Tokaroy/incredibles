@@ -9,7 +9,7 @@ namespace zNPC
 {
     void oracle_idle::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "OI_L_Idle01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "OI_L_Idle01", AnimState_EndLoop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
     }
 
@@ -33,11 +33,11 @@ namespace zNPC
 
     void oracle_charge::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "OC_L_Ball01", AnimState_Loop, 2, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "OC_L_Ball01", AnimState_EndLoop, 2, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
         xAnimTableNewState(table, "OC_T_Open01", AnimState_EndTransition, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
-        xAnimTableNewState(table, "OC_L_Attack01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL,
+        xAnimTableNewState(table, "OC_L_Attack01", AnimState_EndLoop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL,
                            NULL, NULL, NULL);
     }
 

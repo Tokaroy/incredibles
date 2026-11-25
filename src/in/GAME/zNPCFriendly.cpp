@@ -18,7 +18,7 @@ namespace zNPC
 
     void speak::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "SP_L_Talk01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "SP_L_Talk01", AnimState_EndLoop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
     }
 
@@ -28,7 +28,7 @@ namespace zNPC
 
     void idle::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "ID_L_Idle01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "ID_L_Idle01", AnimState_EndLoop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
     }
 
@@ -39,7 +39,7 @@ namespace zNPC
 
     void buddy_anim::add_states(xAnimTable* table)
     {
-        xAnimTableNewState(table, "BA_L_Cycle01", AnimState_Loop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
+        xAnimTableNewState(table, "BA_L_Cycle01", AnimState_EndLoop, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
         xAnimTableNewState(table, "BA_T_Hit01", AnimState_EndTransition, 0, 1.0f, NULL, NULL, 0.0f, NULL, NULL, NULL,
                            NULL, NULL);
