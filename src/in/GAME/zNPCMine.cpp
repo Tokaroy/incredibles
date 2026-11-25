@@ -59,8 +59,8 @@ namespace zNPC
 
     void mine_charge::add_transitions(xAnimTable* table)
     {
-        xAnimTableNewTransition(table, "MC_T_AttackStart01", "MC_L_AttackLoop01", NULL, NULL, 0x10, 0,
-                                0.0f, 0.0f, 0, 0, 0.1f, NULL);
+        xAnimTableNewTransition(table, "MC_T_AttackStart01", "MC_L_AttackLoop01", NULL, NULL,
+                                AnimTransition_Default, 0, 0.0f, 0.0f, 0, 0, 0.1f, NULL);
     }
 
     void mine_charge::setup()

@@ -27,7 +27,7 @@ namespace zNPC
     {
         xAnimTableNewTransition(table, "OC_L_Ball01", "OC_T_Open01", anfacing_player, NULL, 0, 0,
                                 0.0f, 0.0f, 1, 0, 0.1f, NULL);
-        xAnimTableNewTransition(table, "OC_T_Open01", "OC_L_Attack01", NULL, anopened, 0x10, 0,
+        xAnimTableNewTransition(table, "OC_T_Open01", "OC_L_Attack01", NULL, anopened, AnimTransition_Default, 0,
                                 0.0f, 0.0f, 1, 0, 0.1f, NULL);
     }
 

@@ -47,7 +47,7 @@ namespace zNPC
 
     void buddy_anim::add_transitions(xAnimTable* table)
     {
-        xAnimTableNewTransition(table, "BA_T_Hit01", "BA_L_Cycle01", NULL, NULL, 0x10, 0, 0.0f, 0.0f,
+        xAnimTableNewTransition(table, "BA_T_Hit01", "BA_L_Cycle01", NULL, NULL, AnimTransition_Default, 0, 0.0f, 0.0f,
                                 0, 0, 0.1f, NULL);
     }
 
