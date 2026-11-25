@@ -88,12 +88,12 @@ struct xGlobals
     S8 currentActivePad;
     U8 firstStartPressed;
     U8 fromLauncher;
-    U8 skipAssertWithController;
+    bool skipAssertWithController;
     bool FlashWIP;
     bool inLoadingScreen;
     U8 LoadingScene;
     U8 InitializingLoadingScreen;
-    U8 ForceMono;
+    bool ForceMono;
     U32 minVSyncCnt;
     bool dontShowPadMessageDuringLoadingOrCutScene;
     bool autoSaveFeature;

@@ -176,7 +176,7 @@ struct zCombat
     F32 runningAttackTimer;
     zAttackStateRunTimeData runningAttackData;
     xEnt* lastNPCDamaged;
-    U8 disableMovement;
+    bool disableMovement;
     U8 runningEffect;
     U8 runningBlur;
     U8 hitting;
