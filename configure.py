@@ -754,7 +754,7 @@ config.libs = [
             GameObject(Matching, "in/GAME/zVolume.cpp"),
             GameObject(NonMatching, "in/GAME/zWaterhose.cpp"),
             GameObject(Matching, "in/GAME/zActionLine.cpp", sym="on"),
-            GameObject(NonMatching, "in/Core/x/xCollideCache.cpp", sym="on"),
+            GameObject(Matching, "in/Core/x/xCollideCache.cpp", sym="on"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/Core/x/xCollideSpherePolygon.cpp", sym="on"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/GAME/zAsync.cpp", sym="on"),
             GameObject(MatchingFor("GICE78", "GICF78", "GICP78", "GICJ78_20040913", "GICE78_20040912"), "in/Core/x/xParticleBatch.cpp", sym="on"),
