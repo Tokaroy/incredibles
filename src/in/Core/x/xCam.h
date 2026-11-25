@@ -492,6 +492,7 @@ inline xCamOrientEuler& xCamBlend::convert(const xCam& cam, xCamOrientEuler& c) 
 }
 
 #define MAX_OWNED_CAMS 32
+#define MAX_BLEND_CAMS 4
 
 class xCamGroup
 {
@@ -508,7 +509,7 @@ public:
     S32 primary_index;
     S32 child_flags;
     S32 child_flags_mask;
-    xCamBlend* blend_cam[4];
+    xCamBlend* blend_cam[MAX_BLEND_CAMS];
 
     void create();
     void destroy();

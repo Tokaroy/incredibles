@@ -57,7 +57,7 @@ void zAnimCacheClear()
 void zAnimCacheCreateData(zAttackTableState* attackTableStates, U32 attackTableCount, xAnimPlay* animPlay)
 {
     for (U32 i = 0; i < attackTableCount; i++) {
-        for (U32 j = 0; j < ARRAY_LENGTH(attackTableStates[i].effectBoneOutside); j++) {
+        for (U32 j = 0; j < MAX_EFFECT_BONES; j++) {
             attackTableStates[i].bonePositions[j] = NULL;
             if (attackTableStates[i].effect & 0x40) {
                 continue;

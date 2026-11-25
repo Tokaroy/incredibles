@@ -35,6 +35,8 @@ enum
     MAX_ARGS = 32,
     MAX_RECUR = 16,
     MAX_DYNAMICS = 64,
+    MAX_CODEPAGES = 16,
+    MAX_CACHED_MODELS = 8,
     CHAR_VERT_SIZE = 6,
     CHAR_VERT_SIZE_SHADOWED = 12,
     vert_buffer_size = 240
@@ -94,7 +96,7 @@ font_asset default_font_assets[] = {
 };
 
 font_data active_fonts[MAX_FONTS];
-RwTexture* codepage_textures[16];
+RwTexture* codepage_textures[MAX_CODEPAGES];
 size_t active_fonts_size;
 size_t codepage_textures_size;
 RwIm2DVertex vert_buffer[vert_buffer_size];
@@ -474,11 +476,11 @@ struct model_cache_entry
 
 struct model_pool
 {
-    RwMatrix mat[8];
-    xModelInstance model[8];
+    RwMatrix mat[MAX_CACHED_MODELS];
+    xModelInstance model[MAX_CACHED_MODELS];
 };
 
-model_cache_entry model_cache[8];
+model_cache_entry model_cache[MAX_CACHED_MODELS];
 bool model_cache_inited;
 
 void init_model_cache()
@@ -489,7 +491,7 @@ void init_model_cache()
     model_pool& pool = *(model_pool*)data;
     memset(&pool, 0, sizeof(pool));
 
-    for (size_t i = 0; i < ARRAY_LENGTH(model_cache); i++) {
+    for (size_t i = 0; i < MAX_CACHED_MODELS; i++) {
         xModelInstance& model = pool.model[i];
         model_cache_entry& e = model_cache[i];
         e.id = e.order = 0;
@@ -507,7 +509,7 @@ xModelInstance* load_model(U32 id)
     next_order++;
 
     size_t oldest = 0;
-    for (size_t i = 0; i < ARRAY_LENGTH(model_cache); i++) {
+    for (size_t i = 0; i < MAX_CACHED_MODELS; i++) {
         model_cache_entry& e = model_cache[i];
         if (e.id == id) {
             e.order = next_order;
@@ -573,7 +575,7 @@ void xfont::init()
     char filename[20];
     sprintf(filename, "lfont_%i", codepage_textures_size);
     codepage_textures[codepage_textures_size] = (RwTexture*)xSTFindAsset(xStrHash(filename), NULL);
-    while (codepage_textures_size < ARRAY_LENGTH(codepage_textures) && codepage_textures[codepage_textures_size]) {
+    while (codepage_textures_size < MAX_CODEPAGES && codepage_textures[codepage_textures_size]) {
         RwTextureSetFilterMode(codepage_textures[codepage_textures_size], rwFILTERLINEAR);
         codepage_textures_size++;
         sprintf(filename, "lfont_%i", codepage_textures_size);

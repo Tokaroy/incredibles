@@ -13,6 +13,8 @@
 struct xEnv;
 struct xSweptSphere;
 
+#define MAX_EFFECT_BONES 2
+
 struct zAttackTableState
 {
     struct hitBoneInfo
@@ -42,8 +44,8 @@ struct zAttackTableState
     U16 hitEffect;
     F32 effectStart;
     F32 effectEnd;
-    effectBone effectBoneOutside[2];
-    effectBone effectBoneInside[2];
+    effectBone effectBoneOutside[MAX_EFFECT_BONES];
+    effectBone effectBoneInside[MAX_EFFECT_BONES];
     zAnimCacheEntry* bonePositions[2];
     F32 rumbleStartTime;
     U32 rumbleEmitterID;

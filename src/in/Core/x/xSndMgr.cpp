@@ -27,8 +27,8 @@ xSndGlobals gSnd;
 
 xSndEffect m_eCurrentEffect;
 
-static F32 s_fCategoryVolume[6];
-static F32 s_fCategoryVolumeFade[6];
+static F32 s_fCategoryVolume[xSndCat_LAST_CATEGORY + 1];
+static F32 s_fCategoryVolumeFade[xSndCat_LAST_CATEGORY + 1];
 
 inline void xSndMgr_SetInitFlag(bool bIsInit) { bIsInit ? (gSnd.m_uSndMgrFlags |= k_XSNDMGR_INITED) : (gSnd.m_uSndMgrFlags &= ~k_XSNDMGR_INITED); }
 
@@ -387,7 +387,7 @@ void xSndMgrSceneInit()
 {
     xSndMgr_SetInitFlag(true);
 
-    for (S32 i = 0; i < ARRAY_LENGTH(s_fCategoryVolumeFade); i++) {
+    for (S32 i = 0; i < xSndCat_LAST_CATEGORY + 1; i++) {
         s_fCategoryVolumeFade[i] = 0.0f;
     }
 

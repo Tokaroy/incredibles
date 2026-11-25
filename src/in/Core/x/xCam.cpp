@@ -71,13 +71,13 @@ void xCam::create()
 void xCamGroup::create()
 {
     size = 0;
-    for (xCamBlend** it = blend_cam, **end = it + ARRAY_LENGTH(blend_cam); it != end; it++)
+    for (xCamBlend** it = blend_cam, **end = it + MAX_BLEND_CAMS; it != end; it++)
         *it = create_blend();
 }
 
 void xCamGroup::destroy()
 {
-    for (xCamBlend** it = blend_cam, **end = it + ARRAY_LENGTH(blend_cam); it != end; it++)
+    for (xCamBlend** it = blend_cam, **end = it + MAX_BLEND_CAMS; it != end; it++)
         (*it)->destroy();
 }
 
@@ -172,7 +172,7 @@ void xCamGroup::remove(xCam& cam, bool force_cut)
 
 xCamBlend* xCamGroup::grab_blend_cam()
 {
-    for (xCamBlend** it = blend_cam, **end = it + ARRAY_LENGTH(blend_cam); it != end; it++) {
+    for (xCamBlend** it = blend_cam, **end = it + MAX_BLEND_CAMS; it != end; it++) {
         if (!(*it)->group)
             return *it;
     }
