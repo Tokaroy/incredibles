@@ -45,9 +45,9 @@ void zSystemMsgUIEnterScene(zUI* from, zUI* ui, U32 sceneID)
     F32 toParams[4] = { 0.0f, 1.0f, 0.0f, 0.0f };
     memcpy(toParams, &sceneID, sizeof(U32));
 
-    ((zUICustomSysMessageManager*)pSysMessageManager_Custom)
-        ->ShowSystemMessage(ZDSP_elcb_event, eEventUISysMsgWaitResponse, eEventWarpGo, toParams, from,
-                            NULL, 0, xTextFindString(xStrHash("UI TXT SYS MSG CHANGE MISSION"), NULL));
+    ((zUICustomSysMessageManager*)pSysMessageManager_Custom)->ShowSystemMessage(
+        ZDSP_elcb_event, eEventUISysMsgWaitResponse, eEventWarpGo, toParams, from, NULL, 0,
+        xTextFindString(xStrHash("UI TXT SYS MSG CHANGE MISSION"), NULL));
 
     from->Signal(ui, eEventUIFocusOff_Unselect);
 }

@@ -11,8 +11,7 @@ namespace
                                        const F32* toParam, xBase* toParamWidget,
                                        U32 toParamWidgetID)
     {
-        ((xFunctionGenerator*)to)
-            ->HandleEvent(from, toEvent, toParam, toParamWidget, toParamWidgetID);
+        ((xFunctionGenerator*)to)->HandleEvent(from, toEvent, toParam, toParamWidget, toParamWidgetID);
     }
 } // namespace
 

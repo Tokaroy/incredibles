@@ -110,8 +110,7 @@ void zConfig_setScenePlayer_MapEntry(U32 sceneID, U32 _player_tag)
 
     scene_player_map[scene_player_map_max].scene_tag = sceneID;
     scene_player_map[scene_player_map_max].scene_mask = sceneMask;
-    scene_player_map[scene_player_map_max]
-        .player_enum[scene_player_map[scene_player_map_max].playerCount] =
+    scene_player_map[scene_player_map_max].player_enum[scene_player_map[scene_player_map_max].playerCount] =
         (PLAYER_ENUM)zConfig_getPlayerEnumIdx(_player_tag);
     scene_player_map[scene_player_map_max].playerCount++;
 

@@ -166,8 +166,7 @@ public:
     {                                                                                             \
         return !((owner_type*)object)->get_current_behavior()                                     \
                    ? 0                                                                            \
-                   : ((type*)((owner_type*)object)->get_current_behavior())                       \
-                         ->method(tran, anim);                                                    \
+                   : ((type*)((owner_type*)object)->get_current_behavior())->method(tran, anim);  \
     }
 
 U32 ErrorCB(xAnimTransition*, xAnimSingle*, void*);
